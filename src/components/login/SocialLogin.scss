@@ -1,0 +1,19 @@
+.social-login {
+  margin-top: 50px; // 상단 여백 추가
+  .text-center {
+    padding: 20px;
+    background-color: #fff; // 배경색 설정
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // 그림자 효과 추가
+    border-radius: 8px; // 모서리 둥글게
+
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .social-button {
+      width: 100%; // 버튼 너비를 컨테이너에 맞춤
+      font-size: 16px; // 글꼴 크기 설정
+    }
+  }
+}

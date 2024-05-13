@@ -1,0 +1,17 @@
+#navbar-wrap {
+  font-weight: bold;
+  .navbar-logo {
+    border-radius: 5px;
+    padding: 10px 50px;
+    background: #1db5be;
+    color: #fff;
+  }
+  .SignUpBtn {
+    border: 2px solid #000;
+    color: #000;
+  }
+  .SignInBtn {
+    background: #1db5be;
+    color: white;
+  }
+}
