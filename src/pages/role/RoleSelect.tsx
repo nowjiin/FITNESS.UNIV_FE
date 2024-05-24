@@ -1,18 +1,47 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 import './RoleSelect.scss';
 
 function RoleSelectPage() {
-  const selectedRole = async (role: string) => {
-      try {
-        const response = await axios.post('http://localhost:8080/api/role', { role });
-        console.log('Response:', response.data);
-        // 성공적으로 보낸 후 추가 로직을 여기에 추가할 수 있습니다.
-      } catch (error) {
-        console.error('Error sending role to backend:', error);
+  const location = useLocation();
+  
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const token = searchParams.get('token');
+    // const token = localStorage.getItem('token');
+    if (token) {
+      localStorage.setItem('token', token);
+      console.log('Token:', token);
+    } else {
+      console.error('URL에 토큰 못찾았다');
+      return;
+    }
+  }, [location]);
+
+
+const selectedRole = async (role: string) => {
+  try {
+    // JWT 토큰을 로컬 스토리지에서 가져오기
+    const token = localStorage.getItem('token');
+    
+    const response = await axios.post(
+      'http://localhost:8080/api/role',
+      { role },
+      {
+        headers: {
+          // Authorization 헤더에 JWT 토큰을 포함시킴
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
+    );
+    console.log('Response:', response.data);
+      // 성공적으로 보낸 후 추가 로직을 여기에 추가할 수 있습니다.
+  } catch (error) {
+    console.error('Error sending role to backend:', error);
+  }
+};
 
 
   return (
