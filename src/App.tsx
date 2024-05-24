@@ -9,6 +9,7 @@ import LoginedPage from "./pages/home/LoginedPage";
 import RoleSelectPage from "./pages/role/RoleSelect";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import Chatpage from "./pages/chat/Chatpage";
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/home" element={<LoginedPage />} />
           <Route path="/role" element={<RoleSelectPage />} />
+          <Route path="/chat" element={<Chatpage />} />
         </Routes>
       </Router>
     </>
