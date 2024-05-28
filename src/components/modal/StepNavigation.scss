@@ -1,0 +1,11 @@
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+
+  .btn {
+    width: 100%;
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+}

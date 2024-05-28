@@ -15,7 +15,7 @@ function CardGroups() {
             <Card.Body>
               <Card.Title className="CardTitle">내 주변 운동시설</Card.Title>
             </Card.Body>
-            <Card.Img variant="top" src="./near_gyms.png" />
+            <Card.Img variant="top" src="./mainpage/near_gyms.png" />
           </Card>
         </Col>
         <Col>
@@ -23,13 +23,13 @@ function CardGroups() {
             <Card.Body>
               <Card.Title>지도에서 찾기</Card.Title>
             </Card.Body>
-            <Card.Img variant="top" src="./find_on_map.png" />
+            <Card.Img variant="top" src="./mainpage/find_on_map.png" />
           </Card>
           <Card>
             <Card.Body>
               <Card.Title>트레이너 찾기</Card.Title>
             </Card.Body>
-            <Card.Img variant="top" src="./find_trainer.png" />
+            <Card.Img variant="top" src="./mainpage/find_trainer.png" />
           </Card>
         </Col>
       </Row>
