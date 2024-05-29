@@ -71,15 +71,11 @@ const ExerciseModal: React.FC<ExerciseModalProps> = ({
                     selectedExercises.includes(exercise) ? "selected" : ""
                   }`}
                   onClick={() => handleExerciseSelect(exercise)}
-                  style={{
-                    cursor: "pointer",
-                    padding: "10px",
-                    backgroundColor: selectedExercises.includes(exercise)
-                      ? "#e9ecef"
-                      : "#fff",
-                  }}
                 >
                   {exercise}
+                  {selectedExercises.includes(exercise) && (
+                    <span className="check-mark">✔</span>
+                  )}
                 </div>
               ))}
             </div>
