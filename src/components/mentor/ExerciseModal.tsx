@@ -8,8 +8,8 @@ import "./ExerciseModal.scss";
 interface ExerciseModalProps {
   show: boolean;
   handleClose: () => void;
-  selectedExercises: string[];
-  handleExerciseSelect: (exercise: string) => void;
+  selectedExercises: { category: string; exercise: string }[];
+  handleExerciseSelect: (category: string, exercise: string) => void;
   handleCompleteSelection: () => void;
   handleResetSelection: () => void;
 }
@@ -34,6 +34,23 @@ const ExerciseModal: React.FC<ExerciseModalProps> = ({
   handleResetSelection,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const filteredExercises = exercisesByCategory[selectedCategory].filter(
+    (exercise) => exercise.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const isSelected = (exercise: string) => {
+    return selectedExercises.some(
+      (selected) =>
+        selected.exercise === exercise && selected.category === selectedCategory
+    );
+  };
+
   return (
     <div className="container">
       <Modal show={show} onHide={handleClose}>
@@ -46,7 +63,7 @@ const ExerciseModal: React.FC<ExerciseModalProps> = ({
           >
             <img src="./buttons/icon-x-circle.png" alt="x" />
           </button>
-          <SearchInput placeholder="운동명으로 검색"></SearchInput>
+          <SearchInput placeholder="운동명으로 검색" onSearch={handleSearch} />
         </Modal.Header>
         <Modal.Body className="d-flex">
           <div className="sidebar">
@@ -64,16 +81,18 @@ const ExerciseModal: React.FC<ExerciseModalProps> = ({
           </div>
           <div className="content">
             <div className="exercise-list">
-              {exercisesByCategory[selectedCategory].map((exercise: string) => (
+              {filteredExercises.map((exercise: string) => (
                 <div
                   key={exercise}
                   className={`exercise-item ${
-                    selectedExercises.includes(exercise) ? "selected" : ""
+                    isSelected(exercise) ? "selected" : ""
                   }`}
-                  onClick={() => handleExerciseSelect(exercise)}
+                  onClick={() =>
+                    handleExerciseSelect(selectedCategory, exercise)
+                  }
                 >
                   {exercise}
-                  {selectedExercises.includes(exercise) && (
+                  {isSelected(exercise) && (
                     <span className="check-mark">✔</span>
                   )}
                 </div>
@@ -86,7 +105,9 @@ const ExerciseModal: React.FC<ExerciseModalProps> = ({
           <Button
             variant="primary"
             onClick={handleCompleteSelection}
-            className="custom-complete-button"
+            className={`custom-complete-button ${
+              selectedExercises.length > 0 ? "active" : ""
+            }`}
           >
             선택 완료
           </Button>

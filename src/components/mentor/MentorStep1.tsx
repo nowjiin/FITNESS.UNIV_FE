@@ -13,8 +13,10 @@ interface Props {
 const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
   const [exercise, setExercise] = useState<string[]>(data.exercise);
   const [showModal, setShowModal] = useState(false);
-  const [selectedExercises, setSelectedExercises] = useState<string[]>(
-    data.exercise
+  const [selectedExercises, setSelectedExercises] = useState<
+    { category: string; exercise: string }[]
+  >(
+    data.exercise.map((ex) => ({ category: "unknown", exercise: ex })) // initial state
   );
 
   const handleNext = () => {
@@ -24,22 +26,30 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleExerciseSelect = (exercise: string) => {
+  const handleExerciseSelect = (category: string, exercise: string) => {
     setSelectedExercises((prev) =>
-      prev.includes(exercise)
-        ? prev.filter((ex) => ex !== exercise)
-        : [...prev, exercise]
+      prev.some((ex) => ex.exercise === exercise && ex.category === category)
+        ? prev.filter(
+            (ex) => ex.exercise !== exercise || ex.category !== category
+          )
+        : [...prev, { category, exercise }]
     );
   };
 
   const handleCompleteSelection = () => {
-    setExercise(selectedExercises);
+    setExercise(selectedExercises.map((ex) => ex.exercise));
     setShowModal(false);
   };
 
   const handleResetSelection = () => {
     setSelectedExercises([]);
   };
+
+  const isAnyExerciseSelected = selectedExercises.length > 0;
+
+  const displayText = selectedExercises
+    .map((ex) => `${ex.category} > ${ex.exercise}`)
+    .join(", ");
 
   return (
     <div className="mentor-step1-page container text-center mt-5">
@@ -59,12 +69,17 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
         <div className="input-title">어떤 운동을 알려주실건가요?</div>
         <div className="input-subtitle">가능한 운동들을 모두 선택해주세요.</div>
         <ModalInputDisplay
-          displayText={exercise.join(", ")}
+          displayText={displayText}
           onClick={handleShowModal}
         />
         <div className="d-flex justify-content-between">
           <button className="btn btn-light w-50 me-2">이전</button>
-          <button className="btn btn-primary w-50 ms-2" onClick={handleNext}>
+          <button
+            className={`btn w-50 ms-2 ${
+              isAnyExerciseSelected ? "btn-primary active" : "btn-primary"
+            }`}
+            onClick={handleNext}
+          >
             다음
           </button>
         </div>
