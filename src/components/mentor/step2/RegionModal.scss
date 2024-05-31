@@ -1,4 +1,4 @@
-.exercise-modal .modal-dialog {
+.region-modal .modal-dialog {
   max-width: 600px;
 }
 
@@ -47,13 +47,15 @@
     border: none;
     color: white;
     &:hover {
-      background-color: #1db5be;
+      background-color: #17a2b8;
     }
   }
   .custom-complete-button.active {
     background-color: #1db5be;
+    border-color: #1db5be;
     &:hover {
-      background-color: #1db5be;
+      background-color: #17a2b8;
+      border-color: #17a2b8;
     }
   }
 }
@@ -71,9 +73,9 @@
   }
 }
 
-.exercise-list {
+.region-list {
   flex: 1;
-  .exercise-item {
+  .region-item {
     border: 1px solid #e9ecef;
     display: flex;
     justify-content: space-between;
