@@ -7,10 +7,9 @@
   padding: 2px 7px;
   background: transparent;
   cursor: pointer;
-}
-
-.reset-button:hover {
-  background-color: #f8f9fa;
+  &:hover {
+    background: transparent;
+  }
 }
 
 .reset-icon {

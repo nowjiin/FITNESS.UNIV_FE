@@ -1,0 +1,48 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  .form-label {
+    display: flex;
+    align-items: center;
+
+    border: 2px solid #cbd2e0;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #ffffff;
+    color: #2d3648;
+    cursor: pointer;
+    position: relative;
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    input[type="radio"] + .form-option::before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      border: 2px solid #cbd2e0;
+      border-radius: 50%;
+      background-color: #ffffff;
+    }
+    input[type="radio"]:checked + .form-option::before {
+      border-color: #1db5be;
+      background-color: #1db5be;
+    }
+    .form-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    &.selected {
+      background-color: rgba(29, 181, 190, 0.5);
+      border-color: #1db5be;
+      color: #2d3648;
+    }
+  }
+}

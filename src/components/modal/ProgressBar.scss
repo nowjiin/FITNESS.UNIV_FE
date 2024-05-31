@@ -1,20 +1,21 @@
-.progress-status {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  .spantime {
-    font-size: 14px;
-    color: #666;
-  }
-  .remain-step {
-    font-size: 14px;
-    color: #666;
-  }
-}
-
-.progress {
-  height: 10px;
+.progress-bar-container {
   .progress-bar {
-    background-color: #17a2b8;
+    width: 100%;
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    .progress {
+      height: 100%;
+      background-color: #1db5be;
+      transition: width 0.5s ease; // 이 부분은 제거해도 됩니다.
+    }
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 10px;
   }
 }
