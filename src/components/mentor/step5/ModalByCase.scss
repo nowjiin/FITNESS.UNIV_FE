@@ -1,0 +1,40 @@
+.custom-modal .modal-dialog {
+  max-width: 50%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-body-custom {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.content {
+  flex: 1;
+  border: none;
+  overflow-y: auto;
+  max-height: 100%;
+  .modal-by-case-list {
+    border: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+    &.selected {
+      background-color: #e9ecef;
+    }
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+}

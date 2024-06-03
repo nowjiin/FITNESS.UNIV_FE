@@ -63,22 +63,11 @@
 .sidebar {
   width: 130px;
   text-align: center;
+  overflow-y: auto;
+  max-height: 100%;
+
   .sidebar-item {
     border: solid 1px #e9ecef;
-    padding: 10px;
-    cursor: pointer;
-    &.selected {
-      background-color: #e9ecef;
-    }
-  }
-}
-
-.region-list {
-  flex: 1;
-  .region-item {
-    border: 1px solid #e9ecef;
-    display: flex;
-    justify-content: space-between;
     padding: 10px;
     cursor: pointer;
     &.selected {
@@ -90,4 +79,18 @@
 .content {
   flex: 1;
   border: none;
+  overflow-y: auto;
+  .region-list {
+    flex: 1;
+    .region-item {
+      border: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      cursor: pointer;
+      &.selected {
+        background-color: #e9ecef;
+      }
+    }
+  }
 }
