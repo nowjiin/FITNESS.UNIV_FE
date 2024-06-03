@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import MentorStep1 from "../../components/mentor/step1/MentorStep1";
 import MentorStep2 from "../../components/mentor/step2/MentorStep2";
 import MentorStep3 from "../../components/mentor/step3/MentorStep3";
@@ -13,6 +14,11 @@ export interface MentorData {
   gender?: string;
   rate?: string;
   details?: string;
+  university?: string;
+  major?: string;
+  studentId?: string;
+  enrollmentStatus?: string;
+  certifications?: string;
 }
 
 const MentorPage: React.FC = () => {
@@ -20,6 +26,14 @@ const MentorPage: React.FC = () => {
   const [mentorData, setMentorData] = useState<MentorData>({
     exercise: [],
     regions: [],
+    gender: "",
+    rate: "",
+    details: "",
+    university: "",
+    major: "",
+    studentId: "",
+    enrollmentStatus: "",
+    certifications: "",
   });
 
   const handleNext = (data: Partial<MentorData>) => {
@@ -32,9 +46,23 @@ const MentorPage: React.FC = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleComplete = () => {
-    // 완료 버튼 클릭 시의 처리 로직
-    console.log("Form submitted:", mentorData);
+  const handleComplete = async (data: Partial<MentorData>) => {
+    const finalData = { ...mentorData, ...data };
+    setMentorData(finalData);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/mentor",
+        finalData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Form submitted successfully:", response.data);
+    } catch (error) {
+      console.error("There was a problem with the axios operation:", error);
+    }
   };
 
   return (

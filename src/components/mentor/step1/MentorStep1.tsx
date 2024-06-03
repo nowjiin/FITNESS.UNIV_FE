@@ -11,7 +11,6 @@ interface Props {
 }
 
 const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
-  const [exercise, setExercise] = useState<string[]>(data.exercise);
   const [showModal, setShowModal] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
   const [isInvalid, setIsInvalid] = useState(false);
@@ -42,7 +41,6 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
   };
 
   const handleCompleteSelection = () => {
-    setExercise(selectedExercises);
     setShowModal(false);
   };
 

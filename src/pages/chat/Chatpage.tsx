@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "../chat/style.css";
 import profileImage from "../../assets/chat/profile.png";
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS
@@ -6,13 +6,63 @@ import "font-awesome/css/font-awesome.min.css"; // FontAwesome Icons
 
 interface ChatData {
   sender: string;
+  userId: string;
   createdAt: string;
   msg: string;
 }
 
 const Chatpage: React.FC = () => {
-  let username: string | null = prompt("아이디를 입력하세요");
-  let roomNum: string | null = prompt("채팅방 번호를 입력하세요");
+  const [username, setUsername] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [roomNum, setRoomNum] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        console.log("Token being sent:", `Bearer ${token}`);
+
+        const response = await fetch("http://localhost:8080/auth/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.username);
+          setUserId(data.userId);
+        } else {
+          console.error("Failed to fetch user info");
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    const createRoom = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/chat/createRoom", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setRoomNum(data.roomNum);
+        } else {
+          console.error("Failed to create room");
+        }
+      } catch (error) {
+        console.error("Error creating room:", error);
+      }
+    };
+
+    fetchUserInfo();
+    createRoom();
+  }, []);
 
   useEffect(() => {
     const usernameElement: HTMLElement | null =
@@ -51,39 +101,39 @@ const Chatpage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const eventSource = new EventSource(
-      `http://localhost:8080/chat/roomNum/${roomNum}`
-    );
+    if (roomNum && userId) {
+      const eventSource = new EventSource(
+        `http://localhost:8080/chat/roomNum/${roomNum}`
+      );
 
-    eventSource.onmessage = (event) => {
-      const data: ChatData = JSON.parse(event.data);
-      if (data.sender === username) {
-        initMyMessage(data);
-      } else {
-        initYourMessage(data);
-      }
-    };
+      eventSource.onmessage = (event) => {
+        const data: ChatData = JSON.parse(event.data);
+        if (data.userId === userId) {
+          initMyMessage(data);
+        } else {
+          initYourMessage(data);
+        }
+      };
 
-    return () => {
-      eventSource.close();
-    };
-  }, [roomNum, username, initMyMessage, initYourMessage]);
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [roomNum, userId, initMyMessage, initYourMessage]);
 
   const addMessage = useCallback(async (): Promise<void> => {
     let msgInput: HTMLInputElement | null =
-      document.querySelector("#chat-outgoing-msg"); //메시지 입력 요소 선택
+      document.querySelector("#chat-outgoing-msg");
 
-    if (msgInput && username && roomNum) {
-      // 메시지 전송 조건 검사
+    if (msgInput && username && userId && roomNum) {
       let chat = {
-        //chat 객체 생성
         sender: username,
+        userId: userId,
         roomNum: roomNum,
         msg: msgInput.value,
       };
 
       await fetch("http://localhost:8080/chat", {
-        //서버로 메시지 전송 chat객체를 JSON문자열 변환
         method: "post",
         body: JSON.stringify(chat),
         headers: {
@@ -91,9 +141,9 @@ const Chatpage: React.FC = () => {
         },
       });
 
-      msgInput.value = ""; //메시지 전송후 입력필드 초기화
+      msgInput.value = "";
     }
-  }, [username, roomNum]);
+  }, [username, userId, roomNum]);
 
   function getSendMsgBox(data: ChatData): string {
     let md = data.createdAt.substring(5, 10);
