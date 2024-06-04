@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { MentorData } from "../../../pages/mentor/MentorPage";
+import { MenteeData } from "../../../pages/mentee/MenteePage";
 import ExerciseModal from "./ExerciseModal";
 import ModalInputDisplay from "../../modal/ModalInputDisplay";
 import "../common.scss";
 
 interface Props {
-  onNext: (data: Partial<MentorData>) => void;
-  data: MentorData;
+  onNext: (data: Partial<MenteeData>) => void;
+  data: MenteeData;
 }
 
 const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
@@ -52,8 +52,10 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
   return (
     <div className="mentor-step-page container text-center p-0">
       <div className="mx-auto text-start">
-        <div className="input-title">어떤 운동을 알려주실건가요?</div>
-        <div className="input-subtitle">가능한 운동들을 모두 선택해주세요.</div>
+        <div className="input-title">어떤 운동을 배우고 싶으신가요?</div>
+        <div className="input-subtitle">
+          배우고 싶은 운동들을 모두 선택해주세요.
+        </div>
         <ModalInputDisplay
           displayText={selectedExercises.join(", ")}
           onClick={handleShowModal}

@@ -47,21 +47,60 @@ const MentorPage: React.FC = () => {
   };
 
   const handleComplete = async (data: Partial<MentorData>) => {
-    const finalData = { ...mentorData, ...data };
-    setMentorData(finalData);
+    setMentorData((prevData) => ({ ...prevData, ...data }));
+    const requestData = { ...mentorData, ...data };
+    console.log("Request Data:", requestData);
+
+    try {
+      await sendRequestWithRetry(requestData);
+      console.log("Form completed successfully");
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
+  };
+
+  const sendRequestWithRetry = async (requestData: any) => {
+    let token = localStorage.getItem("token");
+    try {
+      await axios.post("http://localhost:8080/api/mentor", requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        // 토큰이 만료된 경우 새 토큰 요청
+        const newToken = await refreshAuthToken();
+        if (newToken) {
+          localStorage.setItem("token", newToken);
+          await axios.post("http://localhost:8080/api/mentor", requestData, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+        } else {
+          throw new Error("Failed to refresh token");
+        }
+      } else {
+        throw error;
+      }
+    }
+  };
+  const refreshAuthToken = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/mentor",
-        finalData,
+        "http://localhost:8080/api/refresh-token",
+        {},
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      console.log("Form submitted successfully:", response.data);
+      return response.data.token;
     } catch (error) {
-      console.error("There was a problem with the axios operation:", error);
+      console.error("Error refreshing token:", error);
+      return null;
     }
   };
 
