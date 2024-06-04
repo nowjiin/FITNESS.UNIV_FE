@@ -3,7 +3,6 @@ import "../chat/Chatpage.scss";
 import profileImage from "../../assets/chat/profile.png";
 import "font-awesome/css/font-awesome.min.css"; // FontAwesome Icons
 
-
 interface ChatData {
   sender: string;
   userId: string;
