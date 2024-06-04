@@ -1,71 +1,87 @@
-import React, { useCallback } from "react";
-import Button from 'react-bootstrap/Button';
+import React, { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
+import CryptoJS from 'crypto-js';
 
-const Paybutton: React.FC = () => {
-
-  const handlePayment = useCallback(() => {
-    const params: { [key: string]: any } = {
-      mchtId: "nxca_jt_il",
-      method: "card",
-      trdDt: "20211231",
-      trdTm: "100000",
-      mchtTrdNo: "ORDER20211231100000",
-      mchtName: "피트니스유니버시티",
-      mchtEName: "FITNESSUNIV",
-      pmtPrdtNm: "PT10회권",
-      trdAmt: "AntV/eDpxIaKF0hJiePDKA==", // 암호화된 거래금액
-      mchtCustNm: "홍길동",
-      notiUrl: "https://example.com/notiUrl",
-      nextUrl: "https://example.com/nextUrl",
-      cancUrl: "https://example.com/cancUrl",
-      pktHash: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-      ui: {
-        type: "popup",
-        width: "430",
-        height: "660"
-      }
-    };
-
-    const formBody = Object.keys(params)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-      .join('&');
-
-    fetch("https://tbnpg.settlebank.co.kr/card/main.do", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-      },
-      body: formBody
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.text();
-      } else {
-        return response.text().then(text => { throw new Error(text) });
-      }
-    })
-    .then(html => {
-      // HTML 응답을 받아서 페이지를 이동
-      const newWindow = window.open();
-      if (newWindow) {
-        newWindow.document.open();
-        newWindow.document.write(html);
-        newWindow.document.close();
-      } else {
-        throw new Error("Unable to open new window");
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error.message);
-    });
-   
-  }, []);
-
-  return (
-    <>
-      <Button variant="outline-success" onClick={handlePayment}>결제하기</Button>{' '}
-    </>
-  );
+// 글로벌 윈도우 객체에 SettlePay를 선언
+declare global {
+  interface Window {
+    SettlePay: any;
+  }
 }
 
-export default Paybutton;
+const PaymentComponent: React.FC = () => {
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 SettlePay.js 스크립트를 동적으로 로드
+    const script = document.createElement('script');
+    script.src = 'https://tbezauth.settlebank.co.kr/js/SettlePay.js';
+    script.charset = 'UTF-8';
+    script.onload = () => {
+      console.log('SettlePay.js loaded.');
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  // 결제 버튼 클릭 시 호출되는 함수
+  const handlePayment = () => {
+    // 현재 날짜와 시간을 얻기 위한 Date 객체 생성
+    const now = new Date();
+    const trDay = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD 형식
+    const trTime = now.toTimeString().slice(0, 8).replace(/:/g, ''); // HHMMSS 형식
+
+    console.log(trDay);
+    console.log(trTime);
+
+    // 결제에 필요한 파라미터 정의
+    const rawSignature = `M2266045OID201902210001${trDay}${trTime}1SETTLEBANKISGOODSETTLEBANKISGOOD`;
+    const hashedSignature = CryptoJS.SHA256(rawSignature).toString(CryptoJS.enc.Hex);
+
+    const parameters: Record<string, string> = {
+      hdInfo: 'IA_AUTHPAGE_1.0_1.0',
+      apiVer: '1.0', // 또는 '2.0'
+      processType: 'D',
+      mercntId: 'M2266045',
+      ordNo: 'OID201902210001',
+      trDay: trDay,
+      trTime: trTime,
+      trPrice: '1', // 필요에 따라 암호화된 값
+      productNm: '배추',
+      dutyFreeYn: 'N',
+      callbackUrl: 'https://callback.co.kr',
+      signature: hashedSignature,
+    };
+
+    // 폼 객체 생성
+    const form = document.createElement('form');
+    form.name = 'sampleFm';
+
+    // 파라미터를 폼에 hidden input 요소로 추가
+    Object.keys(parameters).forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = parameters[key];
+      form.appendChild(input);
+    });
+
+    // 폼을 문서 바디에 추가
+    document.body.appendChild(form);
+
+    // SettlePay 객체가 로드되었는지 확인 후 execute 메소드 호출
+    if (window.SettlePay) {
+      window.SettlePay.execute(form);
+    } else {
+      console.error('SettlePay is not defined');
+    }
+  };
+
+  return (
+    <div>
+      {/* 결제하기 버튼 */}
+      <Button variant="outline-success" onClick={handlePayment}>
+        결제하기
+      </Button>
+    </div>
+  );
+};
+
+export default PaymentComponent;
