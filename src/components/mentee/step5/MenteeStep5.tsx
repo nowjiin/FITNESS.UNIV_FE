@@ -48,7 +48,7 @@ const MenteeStep5: React.FC<Props> = ({ onNext, onPrev, data }) => {
             `}
             onClick={handleNext}
           >
-            다음
+            완료
           </button>
         </div>
       </div>
