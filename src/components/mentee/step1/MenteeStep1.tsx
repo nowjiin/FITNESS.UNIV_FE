@@ -16,7 +16,7 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
 
   useEffect(() => {
     // 기존에 선택된 운동을 설정
-    setSelectedExercises(data.exercise);
+    setSelectedExercises(data.exercise || []);
   }, [data.exercise]);
 
   const handleNext = () => {
