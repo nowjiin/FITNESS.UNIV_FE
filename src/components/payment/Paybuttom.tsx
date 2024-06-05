@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 import CryptoJS from "crypto-js";
 
 // 글로벌 윈도우 객체에 SettlePay를 선언
