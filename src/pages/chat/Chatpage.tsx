@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "../chat/style.css";
+import "../chat/Chatpage.scss";
 import profileImage from "../../assets/chat/profile.png";
-import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS
 import "font-awesome/css/font-awesome.min.css"; // FontAwesome Icons
 
 interface ChatData {

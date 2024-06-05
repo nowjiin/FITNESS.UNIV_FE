@@ -8,6 +8,7 @@ import SignUpPage from "./pages/signup/SignUpPage";
 import LoginedPage from "./pages/home/LoginedPage";
 import RoleSelectPage from "./pages/role/RoleSelect";
 import MentorPage from "./pages/mentor/MentorPage";
+import Paybutton from "./components/payment/Paybuttom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Chatpage from "./pages/chat/Chatpage";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/role" element={<RoleSelectPage />} />
           <Route path="/chat" element={<Chatpage />} />
           <Route path="/mentor" element={<MentorPage />} />
+          <Route path="/paybutton" element={<Paybutton />} />
         </Routes>
       </Router>
     </>
