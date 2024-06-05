@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { MentorData } from "../../../pages/mentor/MentorPage";
 import ExerciseModal from "./ExerciseModal";
 import ModalInputDisplay from "../../modal/ModalInputDisplay";
-import "./MentorStep1.scss";
 import "../common.scss";
 
 interface Props {
