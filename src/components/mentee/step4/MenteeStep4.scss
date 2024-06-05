@@ -1,0 +1,43 @@
+.char-count {
+  font-weight: bold;
+}
+
+.guide-text {
+  font-size: 14px;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  .help-icon {
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  .tooltip {
+    position: absolute;
+    left: 50%;
+    bottom: 125%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -5px;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent;
+      z-index: 10;
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

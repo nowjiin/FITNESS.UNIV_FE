@@ -1,0 +1,142 @@
+.mentor-step-page {
+  .btn-light {
+    background-color: rgba(29, 181, 190, 50%);
+    color: white;
+    &:hover {
+      background-color: #17a2b8;
+      color: white;
+    }
+  }
+  .btn-primary {
+    background-color: rgba(29, 181, 190, 50%);
+    border: none;
+    &:hover {
+      background-color: #17a2b8;
+    }
+  }
+  .btn-primary.active {
+    background-color: #1db5be;
+    border-color: #1db5be;
+    &:hover {
+      background-color: #17a2b8;
+      border-color: #17a2b8;
+    }
+  }
+  .btn-invalid {
+    background-color: #db4455;
+    animation: shake 0.5s;
+    color: white;
+    &:hover {
+      background-color: #db4455;
+      color: white;
+    }
+  }
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-5px);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+    75% {
+      transform: translateX(-5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+.exercise-modal .modal-dialog {
+  max-width: 600px;
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  .modal-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .custom-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch !important;
+  width: 100%;
+  .reset-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    border: 1px solid black;
+    &:hover {
+      background-color: transparent !important;
+      color: black !important;
+    }
+  }
+  .custom-complete-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: rgba(29, 181, 190, 50%);
+    border: none;
+    color: white;
+    &:hover {
+      background-color: #1db5be;
+    }
+  }
+  .custom-complete-button.active {
+    background-color: #1db5be;
+    &:hover {
+      background-color: #1db5be;
+    }
+  }
+}
+
+.sidebar {
+  width: 130px;
+  text-align: center;
+  .sidebar-item {
+    border: solid 1px #e9ecef;
+    padding: 10px;
+    cursor: pointer;
+    &.selected {
+      background-color: #e9ecef;
+    }
+  }
+}
+
+.exercise-list {
+  flex: 1;
+  .exercise-item {
+    border: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+    &.selected {
+      background-color: #e9ecef;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  border: none;
+}
