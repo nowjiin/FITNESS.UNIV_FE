@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 function NavBar() {
   return (
     <div id="navbar-wrap">
-      <Navbar collapseOnSelect expand="sm" className="bg-body-tertiary">
+      <Navbar className="bg-body-tertiary">
         <Container>
           <Navbar.Brand className="navbar-logo" href="/">
             LOGO
@@ -17,14 +17,14 @@ function NavBar() {
             <Nav className="me-auto"></Nav>
             <Nav>
               <Nav.Link href="/sign-up">
-                <Button className="SignUpBtn" variant="outline-light" size="lg">
-                  회원가입
-                </Button>{" "}
+                <Button className="SignUpBtn" variant="info" size="sm">
+                  로그인/회원가입
+                </Button>
               </Nav.Link>
               <Nav.Link href="/sign-in">
-                <Button className="SignInBtn" variant="info" size="lg">
-                  로그인
-                </Button>{" "}
+                <Button className="SignInBtn" variant="info" size="sm">
+                  고객센터
+                </Button>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

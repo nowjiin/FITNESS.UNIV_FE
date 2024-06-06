@@ -1,5 +1,3 @@
-import "./HomeCards.scss";
-
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -7,10 +5,9 @@ import Row from "react-bootstrap/Row";
 
 function CardGroups() {
   return (
-    <Container id="cards-wrap">
+    <Container className="my-5">
       <Row>
-        {/* 70퍼센트 차지하게 */}
-        <Col sm={7}>
+        <Col xs={6}>
           <Card>
             <Card.Body>
               <Card.Title className="CardTitle">내 주변 운동시설</Card.Title>
@@ -18,7 +15,7 @@ function CardGroups() {
             <Card.Img variant="top" src="./mainpage/near_gyms.png" />
           </Card>
         </Col>
-        <Col>
+        <Col xs={6}>
           <Card>
             <Card.Body>
               <Card.Title>지도에서 찾기</Card.Title>
