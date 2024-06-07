@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 
 function CardGroups() {
   return (
-    <Container className="my-5">
+    <Container fluid className="m-0 p-5">
       <Row>
         <Col xs={6}>
           <Card>

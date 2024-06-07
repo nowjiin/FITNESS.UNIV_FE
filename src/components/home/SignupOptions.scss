@@ -3,16 +3,20 @@
   margin: 0 auto;
 }
 
+.bg-gray-100 {
+  background-color: #f8f9fa;
+}
+
 .card-green-bg {
-  background-color: #d9fcf6;
-  border-radius: 15px;
-  border: transparent;
+  background-color: #d9fcf6 !important;
+  border-radius: 15px !important;
+  border: transparent !important;
 }
 
 .card-blue-bg {
-  background-color: #cff1ff;
-  border-radius: 15px;
-  border: transparent;
+  background-color: #cff1ff !important;
+  border-radius: 15px !important;
+  border: transparent !important;
 }
 
 .btn-icon {
@@ -45,13 +49,21 @@
 }
 
 .responsive-text {
-  font-size: 2vw;
+  font-size: 1.5vw;
 
   @media (max-width: 768px) {
-    font-size: 4vw;
+    font-size: 3vw;
   }
 
   @media (min-width: 768px) and (max-width: 1200px) {
-    font-size: 2.5vw;
+    font-size: 2vw;
   }
+}
+
+.card-text-sm {
+  font-size: 1rem; /* Smaller font size */
+}
+
+.container .card .card-body .card-text-sm {
+  font-size: 0.875rem !important; /* Override other styles */
 }
