@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
-import { Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
 import CryptoJS from "crypto-js";
+import axios from "axios";
 
 // 글로벌 윈도우 객체에 SettlePay를 선언
 declare global {
@@ -48,7 +49,7 @@ const PaymentComponent: React.FC = () => {
       trPrice: "1", // 필요에 따라 암호화된 값
       productNm: "배추",
       dutyFreeYn: "N",
-      callbackUrl: "https://callback.co.kr",
+      callbackUrl: "http://localhost:8080/paybutton",
       signature: hashedSignature,
     };
 

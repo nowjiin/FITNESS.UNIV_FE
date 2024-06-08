@@ -8,8 +8,9 @@ import MentorStep5 from "../../components/mentor/step5/MentorStep5";
 import "../../components/mentor/common.scss";
 import "./MentorPage.scss";
 import ProgressBar from "../../components/modal/ProgressBar";
+
 export interface MentorData {
-  exercise: string[];
+  exercises: string[];
   regions: string[];
   gender?: string;
   rate?: string;
@@ -24,7 +25,7 @@ export interface MentorData {
 const MentorPage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [mentorData, setMentorData] = useState<MentorData>({
-    exercise: [],
+    exercises: [],
     regions: [],
     gender: "",
     rate: "",
@@ -49,19 +50,23 @@ const MentorPage: React.FC = () => {
   const handleComplete = async (data: Partial<MentorData>) => {
     const finalData = { ...mentorData, ...data };
     setMentorData(finalData);
+    console.log("Final Data to be sent to server:", finalData); // 이 줄 추가
+
     try {
+      const accesstoken = localStorage.getItem("accessToken");
       const response = await axios.post(
         "http://localhost:8080/api/mentor",
         finalData,
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accesstoken}`,
           },
         }
       );
       console.log("Form submitted successfully:", response.data);
-    } catch (error) {
-      console.error("There was a problem with the axios operation:", error);
+    } catch (err) {
+      console.error("Failed to submit form:", err);
     }
   };
 

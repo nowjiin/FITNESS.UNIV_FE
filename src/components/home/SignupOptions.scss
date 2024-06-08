@@ -1,0 +1,69 @@
+.max-width-container {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.bg-gray-100 {
+  background-color: #f8f9fa;
+}
+
+.card-green-bg {
+  background-color: #d9fcf6 !important;
+  border-radius: 15px !important;
+  border: transparent !important;
+}
+
+.card-blue-bg {
+  background-color: #cff1ff !important;
+  border-radius: 15px !important;
+  border: transparent !important;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: 10px;
+
+  .btn-img {
+    width: 4vw;
+    height: auto;
+  }
+}
+
+.plane-img {
+  //   width: 134px;
+  //   height: 126px;
+  width: 100%;
+  max-width: 134px; /* Ensure it doesn't exceed original size */
+  height: auto;
+  @media (max-width: 768px) {
+    width: 30vw;
+    // height: auto;
+  }
+}
+
+.profile-img {
+  width: 128px;
+  height: 153px;
+}
+
+.responsive-text {
+  font-size: 1.5vw;
+
+  @media (max-width: 768px) {
+    font-size: 3vw;
+  }
+
+  @media (min-width: 768px) and (max-width: 1200px) {
+    font-size: 2vw;
+  }
+}
+
+.card-text-sm {
+  font-size: 1rem; /* Smaller font size */
+}
+
+.container .card .card-body .card-text-sm {
+  font-size: 0.875rem !important; /* Override other styles */
+}

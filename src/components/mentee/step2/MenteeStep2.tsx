@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { MenteeData } from "../../../pages/mentee/MenteePage";
 import ModalInputDisplay from "../../modal/ModalInputDisplay";
 import RegionModal from "./RegionModal";
-import "./MenteeStep2.scss";
 import "../common.scss";
 
 interface MenteeStep2Props {
