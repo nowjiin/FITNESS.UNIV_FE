@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import CryptoJS from "crypto-js";
-import axios from "axios";
 
 // 글로벌 윈도우 객체에 SettlePay를 선언
 declare global {
@@ -29,11 +28,28 @@ const PaymentComponent: React.FC = () => {
     const trDay = now.toISOString().slice(0, 10).replace(/-/g, ""); // YYYYMMDD 형식
     const trTime = now.toTimeString().slice(0, 8).replace(/:/g, ""); // HHMMSS 형식
 
+    // 현재 년, 월, 일, 시, 분, 초를 추출
+    const year = now.getFullYear().toString();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0"); // 월은 0부터 시작하므로 1을 더합니다.
+    const day = now.getDate().toString().padStart(2, "0");
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const milliseconds = now
+      .getMilliseconds()
+      .toString()
+      .padStart(3, "0")
+      .slice(0, 2); // 밀리초의 소수점 둘째 자리까지 추출
+
+    //주문번호생성
+    const ordNo = `OID${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}`;
+
     console.log(trDay);
     console.log(trTime);
+    console.log(ordNo);
 
     // 결제에 필요한 파라미터 정의
-    const rawSignature = `M2266045OID201902210001${trDay}${trTime}1SETTLEBANKISGOODSETTLEBANKISGOOD`;
+    const rawSignature = `M2266045${ordNo}${trDay}${trTime}1SETTLEBANKISGOODSETTLEBANKISGOOD`;
     const hashedSignature = CryptoJS.SHA256(rawSignature).toString(
       CryptoJS.enc.Hex
     );
@@ -43,11 +59,11 @@ const PaymentComponent: React.FC = () => {
       apiVer: "1.0", // 또는 '2.0'
       processType: "D",
       mercntId: "M2266045",
-      ordNo: "OID201902210001",
+      ordNo: ordNo,
       trDay: trDay,
       trTime: trTime,
       trPrice: "1", // 필요에 따라 암호화된 값
-      productNm: "배추",
+      productNm: "pt1회권",
       dutyFreeYn: "N",
       callbackUrl: "http://localhost:8080/paybutton",
       signature: hashedSignature,
