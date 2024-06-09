@@ -22,7 +22,7 @@ function SocialLogin() {
             variant="outline-danger"
             className="social-button mb-3"
             onClick={() =>
-              handleLogin("http://localhost:8080/api/v1/oauth2/authorization/google")
+              handleLogin(process.env.REACT_APP_GOOGLE_LOGIN_URL as string)
             }>
             구글로 시작하기
           </Button>
@@ -30,7 +30,7 @@ function SocialLogin() {
             variant="success"
             className="social-button mb-3"
             onClick={() =>
-              handleLogin("http://localhost:8080/api/v1/oauth2/authorization/naver")
+              handleLogin(process.env.REACT_APP_NAVER_LOGIN_URL as string)
             }>
             네이버 로그인
           </Button>
