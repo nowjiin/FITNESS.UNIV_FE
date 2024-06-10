@@ -1,5 +1,5 @@
-import React from "react";
 import Container from "react-bootstrap/Container";
+
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -11,6 +11,15 @@ function SocialLogin() {
   const handleLogin = (url: string) => {
     window.location.href = url; // Redirect될 OAuth url
   };
+  const handleGoogleLogin = () => {
+    const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?
+		client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}
+		&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}
+		&response_type=code
+		&scope=email profile`;
+    window.location.href = googleLoginUrl;
+  };
+
   return (
     <Container className="social-login">
       <Row className="justify-content-center">
@@ -21,9 +30,8 @@ function SocialLogin() {
           <Button
             variant="outline-danger"
             className="social-button mb-3"
-            onClick={() =>
-              handleLogin(process.env.REACT_APP_GOOGLE_LOGIN_URL as string)
-            }>
+            onClick={handleGoogleLogin}
+          >
             구글로 시작하기
           </Button>
           <Button
@@ -31,7 +39,8 @@ function SocialLogin() {
             className="social-button mb-3"
             onClick={() =>
               handleLogin(process.env.REACT_APP_NAVER_LOGIN_URL as string)
-            }>
+            }
+          >
             네이버 로그인
           </Button>
         </Col>
