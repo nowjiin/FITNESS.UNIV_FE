@@ -16,15 +16,15 @@ const MentorStep1: React.FC<Props> = ({ onNext, data }) => {
 
   useEffect(() => {
     // 기존에 선택된 운동을 설정
-    setSelectedExercises(data.exercise || []);
-  }, [data.exercise]);
+    setSelectedExercises(data.exercises || []);
+  }, [data.exercises]);
 
   const handleNext = () => {
     if (selectedExercises.length === 0) {
       setIsInvalid(true);
       setTimeout(() => setIsInvalid(false), 1000); // 1초 후에 다시 원상태로
     } else {
-      onNext({ exercise: selectedExercises });
+      onNext({ exercises: selectedExercises });
     }
   };
 

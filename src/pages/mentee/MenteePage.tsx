@@ -4,37 +4,63 @@ import MenteeStep2 from "../../components/mentee/step2/MenteeStep2";
 import MenteeStep3 from "../../components/mentee/step3/MenteeStep3";
 import MenteeStep4 from "../../components/mentee/step4/MenteeStep4";
 import MenteeStep5 from "../../components/mentee/step5/MenteeStep5";
+import axios from "axios";
 
 import "../../components/mentee/common.scss";
 import "./MenteePage.scss";
 import ProgressBar from "../../components/modal/ProgressBar";
 
 export interface MenteeData {
-  exercise: string[];
+  exercises: string[];
   regions: string[];
   gender?: string;
   rate?: string;
-  details?: string;
-  university?: string;
   age?: string;
 }
 
 const MenteePage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [menteeData, setMenteeData] = useState<MenteeData>({
-    exercise: [],
+    exercises: [],
     regions: [],
     gender: "",
     rate: "",
+    age: "",
   });
+
+  const handlePrev = (data: Partial<MenteeData>) => {
+    setMenteeData((prevData) => ({ ...prevData, ...data }));
+    setStep((prevStep) => prevStep - 1);
+  };
+
   const handleNext = (data: Partial<MenteeData>) => {
     setMenteeData((prevData) => ({ ...prevData, ...data }));
     setStep((prevStep) => prevStep + 1);
   };
 
-  const handlePrev = (data: Partial<MenteeData>) => {
-    setMenteeData((prevData) => ({ ...prevData, ...data }));
-    setStep((prevStep) => prevStep - 1);
+  const handleComplete = async (data: Partial<MenteeData>) => {
+    const finalData = { ...menteeData, ...data };
+    setMenteeData(finalData);
+    console.log("Final Data to be sent to server:", finalData);
+
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/mentee`,
+        finalData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log("Profile saved successfully:", response.data);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    }
   };
 
   return (
@@ -74,8 +100,8 @@ const MenteePage: React.FC = () => {
         )}
         {step === 5 && (
           <MenteeStep5
-            onNext={handleNext}
             onPrev={handlePrev}
+            onComplete={handleComplete}
             data={menteeData}
           />
         )}

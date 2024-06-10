@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import "./Reviews.scss";
 
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastReviewElementRef = useRef<HTMLDivElement | null>(null);
+
+  const initialReviews = Array.from({ length: 10 }).map((_, i) => ({
+    user: `User ${i}`,
+    location: "Location",
+    rating: 5.0,
+    content: "This is a sample review. The review content goes here.",
+  }));
+
+  const fetchMoreData = useCallback(() => {
+    setReviews((prevReviews) => [...prevReviews, ...initialReviews]);
+  }, [initialReviews]);
 
   useEffect(() => {
-    fetchMoreData();
+    setReviews(initialReviews);
   }, []);
 
-  const fetchMoreData = () => {
-    setTimeout(() => {
-      const newReviews = Array.from({ length: 10 }).map((_, i) => ({
-        id: (page - 1) * 10 + i,
-        user: `User ${page}-${i}`,
-        location: "Location",
-        rating: 5.0,
-        content: "This is a sample review. The review content goes here.",
-      }));
-      setReviews((prevReviews) => {
-        // Loop back to the beginning if we've reached the end
-        if (page >= 5) {
-          return [...prevReviews, ...newReviews];
-        } else {
-          return [...prevReviews, ...newReviews];
-        }
-      });
-      setPage(page >= 5 ? 1 : page + 1);
-    }, 1500);
-  };
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        fetchMoreData();
+      }
+    });
+
+    if (lastReviewElementRef.current) {
+      observer.current.observe(lastReviewElementRef.current);
+    }
+
+    return () => {
+      if (observer.current) observer.current.disconnect();
+    };
+  }, [fetchMoreData]);
 
   return (
     <Container fluid className="p-5 bg-gray-100 reviews-container">
@@ -44,34 +49,32 @@ const Reviews: React.FC = () => {
         실제 수업 후 작성된 100% 리얼 후기를 보고 원하는 트레이너와 수업을 보다
         쉽고, 빠르게 찾을 수 있어요.
       </p>
-      <div id="scrollableDiv" className="scroll-container">
-        <InfiniteScroll
-          dataLength={reviews.length}
-          next={fetchMoreData}
-          hasMore={true}
-          loader={<h4>Loading...</h4>}
-          scrollableTarget="scrollableDiv"
-          className="d-flex"
-        >
-          {reviews.map((review) => (
-            <div key={review.id} className="review-card-container">
-              <Card className="review-card">
-                <Card.Body>
-                  <div className="d-flex align-items-center mb-2">
-                    <div className="user-icon"></div>
-                    <div>
-                      <strong>{review.user}</strong> · {review.location}
-                    </div>
+      <div
+        className="scroll-container d-flex overflow-auto"
+        style={{ height: "300px" }}
+      >
+        {reviews.map((review, index) => (
+          <div
+            key={index}
+            className="review-card-container"
+            ref={index === reviews.length - 1 ? lastReviewElementRef : null}
+          >
+            <Card className="review-card">
+              <Card.Body>
+                <div className="d-flex align-items-center mb-2">
+                  <div className="user-icon"></div>
+                  <div>
+                    <strong>{review.user}</strong> · {review.location}
                   </div>
-                  <div className="mb-2">
-                    <span className="rating">★ {review.rating.toFixed(1)}</span>
-                  </div>
-                  <Card.Text>{review.content}</Card.Text>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </InfiniteScroll>
+                </div>
+                <div className="mb-2">
+                  <span className="rating">★ {review.rating.toFixed(1)}</span>
+                </div>
+                <Card.Text>{review.content}</Card.Text>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
       </div>
     </Container>
   );

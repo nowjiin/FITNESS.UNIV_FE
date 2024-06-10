@@ -5,16 +5,16 @@ import "./MenteeStep5.scss";
 import "../common.scss";
 
 interface Props {
-  onNext: (data: Partial<MenteeData>) => void;
+  onComplete: (data: Partial<MenteeData>) => void;
   onPrev: (data: Partial<MenteeData>) => void;
   data: MenteeData;
 }
 
-const MenteeStep5: React.FC<Props> = ({ onNext, onPrev, data }) => {
+const MenteeStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   const [age, setAge] = useState<string>(data.age || "");
 
-  const handleNext = () => {
-    onNext({ age });
+  const handleComplete = () => {
+    onComplete({ age });
   };
 
   const handlePrev = () => {
@@ -46,7 +46,7 @@ const MenteeStep5: React.FC<Props> = ({ onNext, onPrev, data }) => {
           <button
             className={`btn w-50 ms-2
             `}
-            onClick={handleNext}
+            onClick={handleComplete}
           >
             완료
           </button>
