@@ -11,7 +11,7 @@ import MenteePage from "./pages/mentee/MenteePage";
 import Paybutton from "./components/payment/Paybuttom";
 import PaymentSuccessPage from "./pages/paymentsuccess/Success";
 import RefundButton from "./components/refund/Refundbutton";
-
+import FindMenteePage from "./pages/findmentee/FindMenteePage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Chatpage from "./pages/chat/Chatpage";
 function App() {
@@ -30,6 +30,7 @@ function App() {
           <Route path="/paybutton" element={<Paybutton />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/refund" element={<RefundButton />} />
+          <Route path="/findmentee" element={<FindMenteePage />} />
         </Routes>
       </Router>
     </>
