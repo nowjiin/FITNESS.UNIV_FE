@@ -1,10 +1,6 @@
-import SocialLogin from "../../components/login/SocialLogin";
+import "./SignInPage.scss";
 function SignInPage() {
-  return (
-    <>
-      <SocialLogin />
-    </>
-  );
+  return <></>;
 }
 
 export default SignInPage;
