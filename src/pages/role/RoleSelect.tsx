@@ -30,7 +30,7 @@ function RoleSelectPage() {
       const accessToken = localStorage.getItem("accessToken");
 
       const response = await axios.post(
-        "http://localhost:8080/api/role",
+        process.env.REACT_APP_BACKEND_URL + "/api/role",
         { role },
         {
           headers: {
@@ -56,7 +56,7 @@ function RoleSelectPage() {
         try {
           const refreshToken = localStorage.getItem("refreshToken"); // 로컬 스토리지에서 다시 가져옴
           const refreshResponse = await axios.post(
-            "http://localhost:8080/api/refresh-token",
+            process.env.REACT_APP_BACKEND_URL + "/api/refresh-token",
             {},
             {
               headers: {
@@ -69,7 +69,7 @@ function RoleSelectPage() {
 
           // 갱신된 토큰으로 다시 역할 요청 보내기
           const retryResponse = await axios.post(
-            "http://localhost:8080/api/role",
+            process.env.REACT_APP_BACKEND_URL + "/api/role",
             { role },
             {
               headers: {
