@@ -1,66 +1,38 @@
-/* Reviews.scss */
 .reviews-container {
-  max-width: 100%;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
+  .scroll-container {
+    /* 스크롤 바 숨기기 */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 
-#scrollableDiv {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 10px;
-  scrollbar-width: none;
-  scroll-snap-align: start;
+  .scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+  }
 
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+  .review-card-container {
+    flex: 0 0 auto;
+    width: 200px;
+    margin-right: 16px;
+  }
+
+  .review-card {
+    height: 100%;
+  }
+
+  .user-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  .rating {
+    font-size: 1.2em;
+    color: #f39c12;
   }
 }
-
-.review-card-container {
-  flex: 0 0 auto;
-  width: 300px;
-  margin: 10px;
-  scroll-snap-align: start;
-  animation: slide-in 0.5s ease-out forwards,
-    scroll-horizontal 30s linear infinite;
-}
-
-.review-card {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.user-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #d9d9d9;
-  margin-right: 10px;
-}
-
-.rating {
-  color: #ffbf00;
-  font-size: 1.2rem;
-}
-
-@keyframes slide-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes scroll-horizontal {
+@keyframes scroll {
   0% {
     transform: translateX(100%);
   }

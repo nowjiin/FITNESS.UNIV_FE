@@ -1,4 +1,3 @@
-import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -19,20 +18,28 @@ function SocialLogin() {
           <h2>로그인 / 회원가입</h2>
           <p>SNS 계정으로 간편하게 시작하기</p>
           <Button
-            variant="outline-danger"
-            className="social-button mb-3"
+            className="social-button mb-3 google-button"
             onClick={() =>
               handleLogin(process.env.REACT_APP_GOOGLE_LOGIN_URL as string)
-            }>
-            구글로 시작하기
+            }
+          >
+            <img
+              src="/login-logo/google/google_login_btn.png"
+              alt="구글 로그인"
+              className="google-login-btn"
+            />
           </Button>
           <Button
-            variant="success"
-            className="social-button mb-3"
+            className="social-button mb-3 naver-button"
             onClick={() =>
               handleLogin(process.env.REACT_APP_NAVER_LOGIN_URL as string)
-            }>
-            네이버 로그인
+            }
+          >
+            <img
+              src="/login-logo/naver/naver_login_btn.png"
+              alt="네이버 로그인"
+              className="naver-login-btn"
+            />
           </Button>
         </Col>
       </Row>

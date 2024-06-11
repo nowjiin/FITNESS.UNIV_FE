@@ -55,7 +55,8 @@ const MentorPage: React.FC = () => {
     try {
       const accesstoken = localStorage.getItem("accessToken");
       const response = await axios.post(
-        "http://localhost:8080/api/mentor",
+        process.env.REACT_APP_BACKEND_URL +
+        "/api/mentor",
         finalData,
         {
           headers: {

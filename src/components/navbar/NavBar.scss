@@ -1,18 +1,144 @@
 #navbar-wrap {
   font-weight: bold;
+
   .navbar-logo {
     border-radius: 5px;
     padding: 10px 50px;
     background: #1db5be;
     color: #fff;
+    font-size: 2rem; /* Default font size for larger screens */
   }
-  .SignUpBtn {
-    background: #1db5be;
-    color: white;
-    color: white;
-  }
+
+  .SignUpBtn,
   .SignInBtn {
     background: #1db5be;
     color: white;
+    font-size: 1rem; /* Default font size for larger screens */
+    padding: 5px 10px; /* Adjust padding to fit text better */
+  }
+
+  /* Very small devices (phones, 375px and down) */
+  @media (max-width: 375px) {
+    .navbar-logo {
+      font-size: 1.2rem; /* Smaller font size for very small screens */
+      padding: 5px 25px; /* Adjust padding for smaller screens */
+    }
+
+    .SignUpBtn,
+    .SignInBtn {
+      font-size: 0.75rem; /* Smaller font size for very small screens */
+      padding: 2px 5px; /* Adjust padding to fit text better */
+    }
+  }
+
+  /* Small devices (phones, 576px and down) */
+  @media (min-width: 376px) and (max-width: 576px) {
+    .navbar-logo {
+      font-size: 1.5rem; /* Smaller font size for small screens */
+      padding: 5px 35px; /* Adjust padding for small screens */
+    }
+
+    .SignUpBtn,
+    .SignInBtn {
+      font-size: 0.875rem; /* Smaller font size for small screens */
+      padding: 4px 8px; /* Adjust padding to fit text better */
+    }
+  }
+
+  /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 577px) and (max-width: 768px) {
+    .navbar-logo {
+      font-size: 1.75rem; /* Adjusted font size for medium screens */
+      padding: 8px 40px; /* Adjust padding for medium screens */
+    }
+
+    .SignUpBtn,
+    .SignInBtn {
+      font-size: 0.9rem; /* Adjusted font size for medium screens */
+      padding: 4px 10px; /* Adjust padding to fit text better */
+    }
+  }
+
+  /* Large devices (desktops, 992px and up) */
+  @media (min-width: 769px) and (max-width: 992px) {
+    .navbar-logo {
+      font-size: 1.875rem; /* Adjusted font size for large screens */
+      padding: 10px 45px; /* Adjust padding for large screens */
+    }
+
+    .SignUpBtn,
+    .SignInBtn {
+      font-size: 0.95rem; /* Adjusted font size for large screens */
+      padding: 4px 12px; /* Adjust padding to fit text better */
+    }
+  }
+
+  /* Extra large devices (large desktops, 1200px and up) */
+  @media (min-width: 993px) {
+    .navbar-logo {
+      font-size: 2rem; /* Default font size for extra large screens */
+      padding: 10px 50px; /* Default padding for extra large screens */
+    }
+
+    .SignUpBtn,
+    .SignInBtn {
+      font-size: 1rem; /* Default font size for extra large screens */
+      padding: 5px 10px; /* Default padding for extra large screens */
+    }
+  }
+
+  /* Styles for NavMenuBar */
+  .nav-link {
+    font-size: 1rem; /* Default font size for larger screens */
+    padding: 10px; /* Default padding for nav links */
+    display: flex; /* Ensure text and image are on the same line */
+    align-items: center; /* Vertically center the items */
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+
+  .nav-link img {
+    margin-left: 5px; /* Add some space between text and image */
+    max-width: 16px; /* Ensure the image fits nicely next to the text */
+    height: auto;
+  }
+
+  /* Very small devices (phones, 375px and down) */
+  @media (max-width: 375px) {
+    .nav-link {
+      font-size: 0.75rem; /* Smaller font size for very small screens */
+      padding: 5px; /* Adjust padding for smaller screens */
+    }
+  }
+
+  /* Small devices (phones, 576px and down) */
+  @media (min-width: 376px) and (max-width: 576px) {
+    .nav-link {
+      font-size: 0.875rem; /* Smaller font size for small screens */
+      padding: 8px; /* Adjust padding for small screens */
+    }
+  }
+
+  /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 577px) and (max-width: 768px) {
+    .nav-link {
+      font-size: 0.9rem; /* Adjusted font size for medium screens */
+      padding: 9px; /* Adjust padding for medium screens */
+    }
+  }
+
+  /* Large devices (desktops, 992px and up) */
+  @media (min-width: 769px) and (max-width: 992px) {
+    .nav-link {
+      font-size: 0.95rem; /* Adjusted font size for large screens */
+      padding: 10px; /* Adjust padding for large screens */
+    }
+  }
+
+  /* Extra large devices (large desktops, 1200px and up) */
+  @media (min-width: 993px) {
+    .nav-link {
+      font-size: 1rem; /* Default font size for extra large screens */
+      padding: 10px; /* Default padding for extra large screens */
+    }
   }
 }
