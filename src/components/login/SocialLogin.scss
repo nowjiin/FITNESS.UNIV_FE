@@ -1,5 +1,50 @@
 .social-login {
   margin-top: 50px; // 상단 여백 추가
+  .social-button {
+    width: 100%; /* Ensure buttons take full width */
+    padding: 0;
+    border: 1px solid #ddd; /* Light border to match Google's button style */
+  }
+  .google-login-btn,
+  .naver-login-btn {
+    width: 100%; /* Ensure image takes full width of the button */
+    height: auto;
+  }
+  .google-button {
+    background-color: #ffffff; /* White background for Google button */
+    padding: 0; /* Remove padding for the button to fit the image perfectly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* Set a fixed height for the button */
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #ffffff; /* Ensure background remains white on hover, click, and focus */
+      border-color: #ddd; /* Ensure border remains the same on hover, click, and focus */
+      box-shadow: none; /* Remove box shadow on focus */
+    }
+  }
+  .naver-button {
+    background-color: #03c75a; /* Naver Green */
+    padding: 0; /* Remove padding for the button to fit the image perfectly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* Set a fixed height for the button */
+    border: none; /* Remove default border */
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #03c75a !important; /* Ensure background remains green on hover, click, and focus */
+      box-shadow: none !important; /* Remove box shadow on focus */
+    }
+  }
+  .google-button img,
+  .naver-button img {
+    max-height: 100%;
+    width: auto;
+  }
   .text-center {
     padding: 20px;
     background-color: #fff; // 배경색 설정
