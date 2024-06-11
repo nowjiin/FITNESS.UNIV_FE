@@ -20,9 +20,9 @@
     &:hover,
     &:active,
     &:focus {
-      background-color: #ffffff; /* Ensure background remains white on hover, click, and focus */
-      border-color: #ddd; /* Ensure border remains the same on hover, click, and focus */
-      box-shadow: none; /* Remove box shadow on focus */
+      background-color: #ffffff !important; /* Ensure background remains white on hover, click, and focus */
+      border-color: #ddd !important; /* Ensure border remains the same on hover, click, and focus */
+      box-shadow: none !important; /* Remove box shadow on focus */
     }
   }
   .naver-button {
