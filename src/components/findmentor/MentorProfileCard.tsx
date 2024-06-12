@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
 import { MentorProfile } from "./MentorProfile";
 import "./MentorProfileCard.scss";
 
@@ -18,11 +19,21 @@ const MentorProfileCard: React.FC<MentorProfile> = (mentor) => {
               <div>{mentor.enrollmentStatus}</div>
             </div>
             <div className="user-details">
-              <div>Gender: {mentor.gender}</div>
-              <div>Rate: {mentor.rate}</div>
-              <div>Exercises: {mentor.exercises.join(", ")}</div>
-              <div>Regions: {mentor.regions.join(", ")}</div>
-              <div>Certifications: {mentor.certifications}</div>
+              <div>
+                <Badge bg="primary">성별: {mentor.gender}</Badge>
+              </div>
+              <div>
+                <Badge bg="success">1회 가격 {mentor.rate}</Badge>
+              </div>
+              <div>
+                <Badge bg="warning">과목: {mentor.exercises.join(", ")}</Badge>
+              </div>
+              <div>
+                <Badge bg="danger">지역: {mentor.regions.join(", ")}</Badge>
+              </div>
+              <div>
+                <Badge bg="dark">자격증: {mentor.certifications}</Badge>
+              </div>
             </div>
           </div>
         </div>

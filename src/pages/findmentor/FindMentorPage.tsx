@@ -1,4 +1,3 @@
-// FindMentorPage.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/navbar/NavBar";
@@ -8,6 +7,9 @@ import MentorProfileCard from "../../components/findmentor/MentorProfileCard";
 import { MentorProfile } from "../../components/findmentor/MentorProfile";
 import "./FindMentorPage.scss";
 import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const FindMentorPage: React.FC = () => {
   const [mentors, setMentors] = useState<MentorProfile[]>([]);
@@ -73,18 +75,23 @@ const FindMentorPage: React.FC = () => {
 
     fetchMentors();
   }, [navigate]);
+
   return (
     <>
       <NavBar />
       <NavMenuBar />
-      <div className="content-wrapper">
-        <SearchNavBar />
-        <div className="find-mentor-container">
-          {mentors.map((mentor) => (
-            <MentorProfileCard key={mentor.id} {...mentor} />
-          ))}
-        </div>
-      </div>
+      <SearchNavBar />
+      <Container className="mt-2">
+        <Row>
+          <Col xs={12} className="d-flex">
+            <div className="find-mentor-container d-flex flex-wrap">
+              {mentors.map((mentor) => (
+                <MentorProfileCard key={mentor.id} {...mentor} />
+              ))}
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

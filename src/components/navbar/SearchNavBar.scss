@@ -1,17 +1,29 @@
-.search-container {
+.search-navbar {
+  overflow-x: auto; /* Initially hide overflow */
+  white-space: nowrap; /* Prevent line breaks */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 40px;
-  width: 40%;
-  gap: 20px;
-  align-items: flex-start;
+  flex-wrap: nowrap; /* Ensure items stay on a single line */
+  background: white !important;
 }
 
-.find-mentee-container {
+.search-input-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* 아이템 간의 간격을 조정합니다. */
-  justify-content: center; /* 가로축 방향으로 가운데 정렬 */
-  align-items: center; /* 세로축 방향으로 가운데 정렬 */
+  align-items: center;
+}
+
+.search-input {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-button {
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }

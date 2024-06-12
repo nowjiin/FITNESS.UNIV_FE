@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./SearchNavBar.scss";
 import SearchInput from "../../components/common/SearchInput";
-import GrayButton from "../../components/common/GrayButton";
+import SearchButton from "./SearchButton";
 import ExerciseModal from "../../components/mentor/step1/ExerciseModal";
 import RegionModal from "../../components/mentor/step2/RegionModal";
 import SelectGender from "../../components/modal/SelectGender";
 import SelectPrice from "../../components/modal/SelectPrice";
-
-function FindMenteePage() {
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+function SearchNavBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
@@ -97,16 +99,32 @@ function FindMenteePage() {
   };
 
   return (
-    <>
-      <div className="search-container">
-        <div>키워드로 검색</div>
-        <SearchInput placeholder="키워드 입력" onSearch={handleSearch} />
-        <div>필터로 검색</div>
-        <GrayButton value="운동종목" onClick={handleExerciseButtonClick} />
-        <GrayButton value="지역" onClick={handleRegionButtonClick} />
-        <GrayButton value="수업료" onClick={handlePriceButtonClick} />
-        <GrayButton value="성별" onClick={handleGenderButtonClick} />
-      </div>
+    <Navbar className="search-navbar">
+      <Container>
+        <Navbar.Toggle aria-controls="search-navbar-nav" />
+        <Navbar.Collapse id="search-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Item className="nav-item">
+              <SearchInput placeholder="키워드 입력" onSearch={handleSearch} />
+            </Nav.Item>
+            <Nav.Item className="nav-item">
+              <SearchButton
+                value="운동종목"
+                onClick={handleExerciseButtonClick}
+              />
+            </Nav.Item>
+            <Nav.Item className="nav-item">
+              <SearchButton value="지역" onClick={handleRegionButtonClick} />
+            </Nav.Item>
+            <Nav.Item className="nav-item">
+              <SearchButton value="수업료" onClick={handlePriceButtonClick} />
+            </Nav.Item>
+            <Nav.Item className="nav-item">
+              <SearchButton value="성별" onClick={handleGenderButtonClick} />
+            </Nav.Item>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
 
       <ExerciseModal
         show={isExerciseModalOpen}
@@ -139,8 +157,8 @@ function FindMenteePage() {
         selectedRate={selectedRate}
         handleRateSelect={handleRateSelect}
       />
-    </>
+    </Navbar>
   );
 }
 
-export default FindMenteePage;
+export default SearchNavBar;
