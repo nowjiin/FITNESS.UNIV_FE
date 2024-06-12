@@ -8,7 +8,7 @@ const MentorProfileCard: React.FC<MentorProfile> = (mentor) => {
   return (
     <Card className="mentor-profile-card">
       <Card.Body>
-        <div className="find-mentee-box">
+        <div className="find-mentor-box">
           <img src="../common/profile.webp" alt="User" className="user-image" />
           <div className="userinformation">
             <div className="user-info">
