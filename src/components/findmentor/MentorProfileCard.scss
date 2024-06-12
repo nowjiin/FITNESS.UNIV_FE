@@ -1,0 +1,54 @@
+.mentor-profile-card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 2px solid lightgray; // Light gray border
+  background-color: white;
+
+  .find-mentee-box {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    border: none;
+  }
+
+  .user-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; // Rounded corners for the image
+    margin-right: 10px;
+  }
+
+  .userinformation {
+    display: flex;
+    flex-direction: column; // Arrange items in a column
+    align-items: flex-start; // Align items to the left
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // Align items to the left
+    margin-bottom: 10px;
+
+    .user-name {
+      font-size: 17px; // Font size for the user name
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    div {
+      font-size: 13px; // Font size for other info
+      margin-bottom: 2px;
+    }
+  }
+
+  .user-details {
+    div {
+      font-size: 13px; // Font size for details
+      margin-bottom: 2px;
+    }
+  }
+}
