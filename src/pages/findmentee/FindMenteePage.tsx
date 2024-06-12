@@ -1,26 +1,109 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/navbar/NavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
-import FindMenteeBox from "../../components/findmentee/FindMenteeBox";
-import "./FindMenteePage.scss";
 import SearchNavBar from "../../components/navbar/SearchNavBar";
+import MenteeProfileCard from "../../components/findmentee/MenteeProfileCard";
+import { MenteeProfile } from "../../components/findmentee/MenteeProfile";
+import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
-function FindMenteePage() {
-  // 예시로 10개의 FindMenteeBox 컴포넌트를 생성합니다.
-  const menteeBoxes = Array.from({ length: 11 }).map((_, index) => (
-    <FindMenteeBox key={index} />
-  ));
+const FindMenteePage: React.FC = () => {
+  const [mentees, setMentees] = useState<MenteeProfile[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchMentees = async () => {
+      try {
+        await fetchMenteesWithToken();
+      } catch (error) {
+        console.error(
+          "There was an error fetching the mentee profiles!",
+          error
+        );
+      }
+    };
+
+    const fetchMenteesWithToken = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/mentee`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setMentees(response.data);
+      } catch (error) {
+        if (
+          axios.isAxiosError(error) &&
+          error.response &&
+          error.response.status === 401
+        ) {
+          // Token might be expired, try to refresh it
+          try {
+            await refreshAccessToken();
+            // Retry fetching mentees with the new token
+            await fetchMenteesWithToken();
+          } catch (refreshError) {
+            console.error("Token refresh failed", refreshError);
+            navigate("/"); // Redirect to the main page or login page
+          }
+        } else {
+          throw error;
+        }
+      }
+    };
+
+    const refreshAccessToken = async () => {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) throw new Error("No refresh token available");
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/refresh-token`,
+        { refreshToken }
+      );
+
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+    };
+
+    fetchMentees();
+  }, [navigate]);
 
   return (
     <>
       <NavBar />
       <NavMenuBar />
-      <div className="content-wrapper">
-        <SearchNavBar />
-        <div className="find-mentee-container">{menteeBoxes}</div>
-      </div>
+      <SearchNavBar />
+      <Container className="mt-2">
+        {mentees
+          .reduce((rows, mentee, index) => {
+            if (index % 3 === 0) rows.push([]);
+            rows[rows.length - 1].push(mentee);
+            return rows;
+          }, [] as MenteeProfile[][])
+          .map((menteeRow, rowIndex) => (
+            <Row key={rowIndex} className="mb-4">
+              {menteeRow.map((mentee) => (
+                <Col
+                  key={mentee.id}
+                  xs={12}
+                  md={4}
+                  className="d-flex justify-content-center"
+                >
+                  <MenteeProfileCard {...mentee} />
+                </Col>
+              ))}
+            </Row>
+          ))}
+      </Container>
     </>
   );
-}
+};
 
 export default FindMenteePage;
