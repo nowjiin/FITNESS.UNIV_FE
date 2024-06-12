@@ -13,7 +13,7 @@ function NavMenuBar() {
             <Nav className="me-auto my-2 my-lg-0">
               <Nav.Link href="#action1">운동 찾기</Nav.Link>
               <Nav.Link href="#action2">커뮤니티</Nav.Link>
-              <Nav.Link href="#action3">
+              <Nav.Link href="/findmentee">
                 수강생 찾기
                 <img
                   src="./buttons/icon-arrow-right-top.png"
@@ -21,7 +21,7 @@ function NavMenuBar() {
                   alt="arrow"
                 />
               </Nav.Link>
-              <Nav.Link href="#action4">
+              <Nav.Link href="/findmentor">
                 트레이너 찾기
                 <img
                   src="./buttons/icon-arrow-right-top.png"
