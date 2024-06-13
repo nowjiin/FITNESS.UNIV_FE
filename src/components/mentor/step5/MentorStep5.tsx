@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MentorData } from "../../../pages/mentor/MentorPage";
 import ModalInputDisplay from "../../modal/ModalInputDisplay";
 import ModalByCase from "./ModalByCase";
@@ -345,6 +346,8 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   const [filteredItems, setFilteredItems] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
+  const navigate = useNavigate();
+
   const handleComplete = () => {
     onComplete({
       university,
@@ -353,6 +356,8 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
       enrollmentStatus,
       certifications,
     });
+    alert("반갑습니다! 트레이너 등록이 완료되었습니다!");
+    navigate("/");
   };
 
   const handlePrev = () => {

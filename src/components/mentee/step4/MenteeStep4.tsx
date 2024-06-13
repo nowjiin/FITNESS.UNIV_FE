@@ -43,7 +43,12 @@ const MenteeStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
           <button className="btn btn-light w-50 me-2" onClick={handlePrev}>
             이전
           </button>
-          <button className={`btn btn-light w-50 ms-2`} onClick={handleNext}>
+          <button
+            className={`btn w-50 ms-2 ${
+              rate ? "btn-primary active" : "btn-light"
+            }`}
+            onClick={handleNext}
+          >
             다음
           </button>
         </div>
