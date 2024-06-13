@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MenteeData } from "../../../pages/mentee/MenteePage";
 import FormRadioGroup from "../../common/FormRadioGroup";
 import "./MenteeStep5.scss";
@@ -13,8 +14,12 @@ interface Props {
 const MenteeStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   const [age, setAge] = useState<string>(data.age || "");
 
+  const navigate = useNavigate();
+
   const handleComplete = () => {
     onComplete({ age });
+    alert("반갑습니다! 수강생 등록이 완료되었습니다!");
+    navigate("/");
   };
 
   const handlePrev = () => {
@@ -44,8 +49,9 @@ const MenteeStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
             이전
           </button>
           <button
-            className={`btn w-50 ms-2
-            `}
+            className={`btn w-50 ms-2 ${
+              age ? "btn-primary active" : "btn-light"
+            }`}
             onClick={handleComplete}
           >
             완료

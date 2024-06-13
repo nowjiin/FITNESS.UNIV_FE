@@ -16,11 +16,11 @@ function RoleSelectPage() {
     if (accessToken && refreshToken) {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
     } else {
-      console.error("URL에 토큰을 찾을 수 없습니다.");
-      navigate("/"); // 메인 페이지로 리다이렉트
+      //url로 쳐서 접속 했을경우
+      console.error("토큰이 없음 url로 접속한거.");
+      alert("다시 로그인 해주세요!");
+      navigate("/");
     }
   }, [location, navigate]);
 
@@ -29,18 +29,17 @@ function RoleSelectPage() {
       // JWT 토큰을 로컬 스토리지에서 가져오기
       const accessToken = localStorage.getItem("accessToken");
 
+      //post 요청
       const response = await axios.post(
         process.env.REACT_APP_BACKEND_URL + "/api/role",
         { role },
         {
           headers: {
-            // Authorization 헤더에 JWT 토큰을 포함시킴
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
       console.log("Response:", response.data);
-      // 성공적으로 보낸 후 추가 로직
       if (role === "ROLE_MENTOR") {
         navigate("/mentor");
       } else if (role === "ROLE_MENTEE") {
@@ -81,8 +80,10 @@ function RoleSelectPage() {
         } catch (refreshError: unknown) {
           if (axios.isAxiosError(refreshError)) {
             console.error("Error refreshing token:", refreshError);
+            alert("다시 로그인 해주세요!");
             navigate("/"); // 메인 페이지로 리다이렉트
           } else {
+            alert("다시 로그인 해주세요!");
             console.error("Error refreshing token:", refreshError);
           }
         }
