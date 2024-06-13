@@ -1,0 +1,40 @@
+.my-page {
+  .profile-card {
+    border: none !important;
+    .user-image {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  .card-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .badge {
+    font-size: 0.8rem;
+    padding: 0.5em 1em;
+  }
+  .list-group-item {
+    cursor: pointer;
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+  .btn-outline-primary {
+    color: #1db5be;
+    border-color: #1db5be;
+    &:hover {
+      background-color: #1db5be;
+      color: white;
+    }
+  }
+  .diamond-image {
+    width: 30px;
+    height: 30px;
+  }
+}
