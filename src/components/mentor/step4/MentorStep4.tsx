@@ -15,9 +15,15 @@ const MentorStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
   const [details, setDetails] = useState<string>(data.details || "");
   const [charCount, setCharCount] = useState<number>(details.length);
   const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
 
   const handleNext = () => {
-    onNext({ rate, details });
+    if (!rate && !details) {
+      setIsInvalid(true);
+      setTimeout(() => setIsInvalid(false), 1000);
+    } else {
+      onNext({ rate, details });
+    }
   };
 
   const handlePrev = () => {
@@ -75,12 +81,13 @@ const MentorStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
           </button>
           <button
             className={`btn w-50 ms-2 ${
-              rate && details.length >= 100
+              isInvalid
+                ? "btn-invalid"
+                : rate || details
                 ? "btn-primary active"
                 : "btn-primary"
             }`}
             onClick={handleNext}
-            // disabled={!rate || details.length < 100}
           >
             다음
           </button>

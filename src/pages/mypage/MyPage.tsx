@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import NavBar from "../../components/navbar/NavBar";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import { refreshAccessToken } from "../../auth/refreshAccessToken";
@@ -42,8 +41,6 @@ const MyPage: React.FC = () => {
     major: "",
     rate: "",
   });
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const fetchProfileData = async (): Promise<void> => {
     try {
@@ -94,7 +91,6 @@ const MyPage: React.FC = () => {
           major: profileData.major,
           rate: profileData.rate,
         });
-        setIsAuthenticated(true);
       }
     } catch (error) {
       if (
@@ -123,7 +119,7 @@ const MyPage: React.FC = () => {
 
   return (
     <>
-      {isAuthenticated ? <LoginedNavBar /> : <NavBar />}
+      <LoginedNavBar />
       <NavMenuBar />
       <Container className="my-page mt-4">
         <Row>

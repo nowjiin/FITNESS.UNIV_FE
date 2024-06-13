@@ -12,9 +12,15 @@ interface Props {
 
 const MentorStep3: React.FC<Props> = ({ onNext, onPrev, data }) => {
   const [gender, setGender] = useState<string>(data.gender || "");
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
 
   const handleNext = () => {
-    onNext({ gender });
+    if (!gender) {
+      setIsInvalid(true);
+      setTimeout(() => setIsInvalid(false), 1000); // 1초 후에 다시 원상태로
+    } else {
+      onNext({ gender });
+    }
   };
 
   const handlePrev = () => {
@@ -37,7 +43,11 @@ const MentorStep3: React.FC<Props> = ({ onNext, onPrev, data }) => {
           </button>
           <button
             className={`btn w-50 ms-2 ${
-              gender ? "btn-primary active" : "btn-primary"
+              isInvalid
+                ? "btn-invalid"
+                : gender
+                ? "btn-primary active"
+                : "btn-primary"
             }`}
             onClick={handleNext}
           >
