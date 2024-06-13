@@ -13,6 +13,7 @@ import PaymentSuccessPage from "./pages/paymentsuccess/Success";
 import RefundButton from "./components/refund/Refundbutton";
 import FindMenteePage from "./pages/findmentee/FindMenteePage";
 import FindMentorPage from "./pages/findmentor/FindMentorPage";
+import MyPage from "./pages/mypage/MyPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Chatpage from "./pages/chat/Chatpage";
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/refund" element={<RefundButton />} />
           <Route path="/findmentee" element={<FindMenteePage />} />
           <Route path="/findmentor" element={<FindMentorPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Router>
     </>

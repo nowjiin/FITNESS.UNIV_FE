@@ -13,6 +13,7 @@ function LoginedNavBar() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     navigate("/");
+    navigate(0);
   };
 
   return (
@@ -26,7 +27,7 @@ function LoginedNavBar() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
             <Nav>
-              <Nav.Link href="/my-profile">
+              <Nav.Link href="/mypage">
                 <Button className="SignInBtn" variant="info" size="lg">
                   마이페이지
                 </Button>

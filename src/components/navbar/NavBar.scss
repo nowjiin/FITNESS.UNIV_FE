@@ -11,10 +11,8 @@
 
   .SignUpBtn,
   .SignInBtn {
-    background: #1db5be;
-    color: white;
-    font-size: 1rem; /* Default font size for larger screens */
-    padding: 5px 10px; /* Adjust padding to fit text better */
+    background-color: transparent;
+    border: none;
   }
 
   /* Very small devices (phones, 375px and down) */
@@ -94,6 +92,10 @@
     display: flex; /* Ensure text and image are on the same line */
     align-items: center; /* Vertically center the items */
     white-space: nowrap; /* Prevent text from wrapping */
+    outline: none; /* Remove border on click */
+    &:focus {
+      outline: none; /* Remove border on focus */
+    }
   }
 
   .nav-link img {
