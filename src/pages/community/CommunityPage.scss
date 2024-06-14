@@ -1,0 +1,28 @@
+.community-page {
+  .profile-card {
+    .user-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+    .stats {
+      div {
+        text-align: center;
+      }
+    }
+  }
+  .card {
+    .card-body {
+      .card-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+  .form-control,
+  .form-select {
+    margin-bottom: 1rem;
+  }
+  .btn {
+    margin-top: 1rem;
+  }
+}

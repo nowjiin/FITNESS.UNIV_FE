@@ -16,6 +16,7 @@ import FindMentorPage from "./pages/findmentor/FindMentorPage";
 import MyPage from "./pages/mypage/MyPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ChatButton from "./components/common/ChatButton";
+import CommunityPage from "./pages/community/CommunityPage";
 function App() {
   return (
     <>
@@ -35,6 +36,7 @@ function App() {
           <Route path="/findmentor" element={<FindMentorPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/chatbutton" element={<ChatButton />} />
+          <Route path="/community" element={<CommunityPage />} />
         </Routes>
       </Router>
     </>
