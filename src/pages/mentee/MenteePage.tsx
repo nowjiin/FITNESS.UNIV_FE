@@ -47,12 +47,13 @@ const MenteePage: React.FC = () => {
     console.log(accessToken);
 
     try {
+      const accesstoken = localStorage.getItem("accessToken");
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/mentee`,
         finalData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${accesstoken}`,
           },
         }
       );

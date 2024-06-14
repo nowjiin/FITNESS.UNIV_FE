@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/navbar/NavBar";
+import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import SearchNavBar from "../../components/navbar/SearchNavBar";
 import MenteeProfileCard from "../../components/findmentee/MenteeProfileCard";
@@ -13,6 +14,7 @@ import Col from "react-bootstrap/Col";
 const FindMenteePage: React.FC = () => {
   const [mentees, setMentees] = useState<MenteeProfile[]>([]);
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMentees = async () => {
@@ -37,6 +39,7 @@ const FindMenteePage: React.FC = () => {
             },
           }
         );
+        setIsAuthenticated(true);
         setMentees(response.data);
       } catch (error) {
         if (
@@ -50,7 +53,7 @@ const FindMenteePage: React.FC = () => {
             // Retry fetching mentees with the new token
             await fetchMenteesWithToken();
           } catch (refreshError) {
-            console.error("Token refresh failed", refreshError);
+            alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
             navigate("/"); // Redirect to the main page or login page
           }
         } else {
@@ -77,7 +80,7 @@ const FindMenteePage: React.FC = () => {
 
   return (
     <>
-      <NavBar />
+      {isAuthenticated ? <LoginedNavBar /> : <NavBar />}
       <NavMenuBar />
       <SearchNavBar />
       <Container className="mt-2">

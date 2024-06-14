@@ -101,11 +101,10 @@ const MyPage: React.FC = () => {
         try {
           const newToken = await refreshAccessToken();
           localStorage.setItem("accessToken", newToken);
-          fetchProfileData();
+          await fetchProfileData(); // Retry fetching the profile data with the new token
         } catch (refreshError) {
-          console.error("Error refreshing access token", refreshError);
           alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-          navigate("/sign-up");
+          navigate("/");
         }
       } else {
         console.error("Error fetching profile data", error);
@@ -115,7 +114,7 @@ const MyPage: React.FC = () => {
 
   useEffect(() => {
     fetchProfileData();
-  }, [navigate]);
+  }, []);
 
   return (
     <>

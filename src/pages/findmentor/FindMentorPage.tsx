@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/navbar/NavBar";
+import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import SearchNavBar from "../../components/navbar/SearchNavBar";
 import MentorProfileCard from "../../components/findmentor/MentorProfileCard";
@@ -14,6 +15,7 @@ import { refreshAccessToken } from "../../auth/refreshAccessToken";
 const FindMentorPage: React.FC = () => {
   const [mentors, setMentors] = useState<MentorProfile[]>([]);
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMentors = async () => {
@@ -26,7 +28,6 @@ const FindMentorPage: React.FC = () => {
         );
       }
     };
-
     const fetchMentorsWithToken = async () => {
       try {
         const token = localStorage.getItem("accessToken");
@@ -38,6 +39,7 @@ const FindMentorPage: React.FC = () => {
             },
           }
         );
+        setIsAuthenticated(true);
         setMentors(response.data);
       } catch (error) {
         if (
@@ -59,8 +61,8 @@ const FindMentorPage: React.FC = () => {
             );
             setMentors(response.data);
           } catch (refreshError) {
-            console.error("Token refresh failed", refreshError);
-            navigate("/"); // Redirect to the main page or login page
+            alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
+            navigate("/");
           }
         } else {
           throw error;
@@ -73,7 +75,7 @@ const FindMentorPage: React.FC = () => {
 
   return (
     <>
-      <NavBar />
+      {isAuthenticated ? <LoginedNavBar /> : <NavBar />}
       <NavMenuBar />
       <SearchNavBar />
       <Container className="mt-2">
