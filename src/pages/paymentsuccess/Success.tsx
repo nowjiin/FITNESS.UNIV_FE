@@ -51,13 +51,19 @@ const PaymentSuccessPage: React.FC = () => {
 
       // 프록시를 사용하여 Settlebank API에 POST 요청
       axios
-        .post("http://localhost:8080/proxy/settlebank", parameters)
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/proxy/settlebank`,
+          parameters
+        )
         //로그에 핵토에서 보낸 파라미터값 출력
         .then((response) => {
           console.log("Settlebank API response:", response.data);
           // 결제 회사의 응답 데이터를 백엔드로 전송
           axios
-            .post("http://localhost:8080/payment/approval", response.data)
+            .post(
+              `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+              response.data
+            )
             .then((backendResponse) => {
               console.log("Backend response:", backendResponse.data);
               setLoading(false); // 로딩 상태 해제

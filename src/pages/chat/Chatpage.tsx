@@ -27,11 +27,14 @@ const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
         const token = localStorage.getItem("refreshToken");
         console.log("Token being sent:", `Bearer ${token}`);
 
-        const response = await axios.get("http://localhost:8080/auth/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/auth/user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           const data = response.data;
