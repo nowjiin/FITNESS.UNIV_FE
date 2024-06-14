@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // React Router 사용
 import "../chat/Chatpage.scss";
 import profileImage from "../../assets/chat/profile.png";
 import "font-awesome/css/font-awesome.min.css"; // FontAwesome Icons
+import axios from "axios"; // axios import
 
 interface ChatData {
   sender: string;
@@ -10,25 +12,29 @@ interface ChatData {
   msg: string;
 }
 
-const Chatpage: React.FC = () => {
+interface ChatpageProps {
+  roomNum: string;
+  handleBackClick: () => void;
+}
+
+const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [roomNum, setRoomNum] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("refreshToken");
         console.log("Token being sent:", `Bearer ${token}`);
 
-        const response = await fetch("http://localhost:8080/auth/user", {
+        const response = await axios.get("http://localhost:8080/auth/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (response.ok) {
-          const data = await response.json();
+        if (response.status === 200) {
+          const data = response.data;
           setUsername(data.username);
           setUserId(data.userId);
         } else {
@@ -39,28 +45,7 @@ const Chatpage: React.FC = () => {
       }
     };
 
-    const createRoom = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/chat/createRoom", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setRoomNum(data.roomNum);
-        } else {
-          console.error("Failed to create room");
-        }
-      } catch (error) {
-        console.error("Error creating room:", error);
-      }
-    };
-
     fetchUserInfo();
-    createRoom();
   }, []);
 
   useEffect(() => {
@@ -132,9 +117,7 @@ const Chatpage: React.FC = () => {
         msg: msgInput.value,
       };
 
-      await fetch("http://localhost:8080/chat", {
-        method: "post",
-        body: JSON.stringify(chat),
+      await axios.post("http://localhost:8080/chat", chat, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
@@ -178,6 +161,7 @@ const Chatpage: React.FC = () => {
         <div className="col-sm-12">
           <div id="user_chat_data" className="user_chat_data">
             <div className="profile_name">
+              <button onClick={handleBackClick}>뒤로가기</button>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <img
                 src={profileImage}
