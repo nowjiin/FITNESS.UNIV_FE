@@ -1,0 +1,53 @@
+.chat-modal {
+  position: fixed;
+  left: -390px;
+  top: 0;
+  width: 390px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease;
+
+  &.show {
+    left: 0;
+  }
+
+  .chat-modal-content {
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+
+    button {
+      margin-bottom: 20px;
+    }
+
+    .profile-section {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+      }
+
+      .profile-info {
+        h2 {
+          margin: 0;
+          font-size: 1.2em;
+        }
+
+        p {
+          margin: 0;
+          color: gray;
+        }
+      }
+    }
+  }
+}

@@ -15,7 +15,8 @@ import FindMenteePage from "./pages/findmentee/FindMenteePage";
 import FindMentorPage from "./pages/findmentor/FindMentorPage";
 import MyPage from "./pages/mypage/MyPage";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Chatpage from "./pages/chat/Chatpage";
+import ChatButton from "./components/common/ChatButton";
+import CommunityPage from "./pages/community/CommunityPage";
 function App() {
   return (
     <>
@@ -26,7 +27,6 @@ function App() {
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/home" element={<LoginedPage />} />
           <Route path="/role" element={<RoleSelectPage />} />
-          <Route path="/chat" element={<Chatpage />} />
           <Route path="/mentor" element={<MentorPage />} />
           <Route path="/mentee" element={<MenteePage />} />
           <Route path="/paybutton" element={<Paybutton />} />
@@ -35,6 +35,8 @@ function App() {
           <Route path="/findmentee" element={<FindMenteePage />} />
           <Route path="/findmentor" element={<FindMentorPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/chatbutton" element={<ChatButton />} />
+          <Route path="/community" element={<CommunityPage />} />
         </Routes>
       </Router>
     </>

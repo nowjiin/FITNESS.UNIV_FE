@@ -337,6 +337,7 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   const [certifications, setCertifications] = useState<string>(
     data.certifications || ""
   );
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
 
   const [showModal, setShowModal] = useState<{
     type: string;
@@ -349,15 +350,26 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   const navigate = useNavigate();
 
   const handleComplete = () => {
-    onComplete({
-      university,
-      major,
-      studentId,
-      enrollmentStatus,
-      certifications,
-    });
-    alert("반갑습니다! 트레이너 등록이 완료되었습니다!");
-    navigate("/");
+    if (
+      !university ||
+      !major ||
+      !studentId ||
+      !enrollmentStatus ||
+      !certifications
+    ) {
+      setIsInvalid(true);
+      setTimeout(() => setIsInvalid(false), 1000); // 1초 후에 다시 원상태로
+    } else {
+      onComplete({
+        university,
+        major,
+        studentId,
+        enrollmentStatus,
+        certifications,
+      });
+      alert("반갑습니다! 트레이너 등록이 완료되었습니다!");
+      navigate("/");
+    }
   };
 
   const handlePrev = () => {
@@ -477,7 +489,6 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
     <div className="mentor-step-page container text-center p-0">
       <div className="mx-auto text-start">
         <div className="input-title mb-4">선생님의 정보를 알려주세요 !</div>
-
         <div className="form-group">
           <h6>대학</h6>
           <ModalInputDisplay
@@ -528,15 +539,18 @@ const MentorStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
             이전
           </button>
           <button
-            className="btn btn-primary w-50 ms-2"
+            className={`btn w-50 ms-2 ${
+              isInvalid
+                ? "btn-invalid"
+                : university &&
+                  major &&
+                  studentId &&
+                  enrollmentStatus &&
+                  certifications
+                ? "btn-primary active"
+                : "btn-primary"
+            }`}
             onClick={handleComplete}
-            disabled={
-              !university ||
-              !major ||
-              !studentId ||
-              !enrollmentStatus ||
-              !certifications
-            }
           >
             완료
           </button>

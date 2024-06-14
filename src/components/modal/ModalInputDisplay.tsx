@@ -20,6 +20,7 @@ const InputDisplay: React.FC<InputDisplayProps> = ({
         className={`custom-input-display ${
           isSelected ? "selected" : "placeholder"
         }`}
+        onClick={onClick}
       >
         {displayText || placeholder}
       </div>
