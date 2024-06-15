@@ -65,7 +65,7 @@ const PaymentComponent: React.FC = () => {
       trPrice: "1", // 필요에 따라 암호화된 값
       productNm: "pt1회권",
       dutyFreeYn: "N",
-      callbackUrl: "http://localhost:8080/paybutton",
+      callbackUrl: `${process.env.REACT_APP_BACKEND_URL}/paybutton`,
       signature: hashedSignature,
     };
 

@@ -14,7 +14,7 @@ const ChatButton: React.FC = () => {
   const handleChatButtonClick = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/chat/createRoom"
+        `${process.env.REACT_APP_BACKEND_URL}/chat/createRoom`
       );
       const { roomNum } = response.data;
       setRooms((prevRooms) => [...prevRooms, { roomNum }]);
