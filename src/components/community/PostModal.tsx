@@ -26,26 +26,26 @@ const PostModal: React.FC<PostModalProps> = ({
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Create New Post</Modal.Title>
+        <Modal.Title>게시글 작성</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>제목</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter title"
+              placeholder="제목을 입력하세요."
               name="title"
               value={newPost.title}
               onChange={handleChange}
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Content</Form.Label>
+            <Form.Label>내용</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              placeholder="Enter content"
+              placeholder="내용을 입력하세요"
               name="content"
               value={newPost.content}
               onChange={handleChange}
@@ -55,10 +55,10 @@ const PostModal: React.FC<PostModalProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleCloseModal}>
-          Close
+          닫기
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
+          글쓰기
         </Button>
       </Modal.Footer>
     </Modal>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
@@ -12,7 +12,7 @@ import NavMenuBar from "../../components/navbar/NavMenuBar";
 import Notice from "../../components/community/Notice";
 import PostTable from "../../components/community/PostTable";
 import PostModal from "../../components/community/PostModal";
-import { refreshAccessToken } from "../../auth/refreshAccessToken";
+import { handleTokenError } from "../../auth/tokenService";
 import "./CommunityPage.scss";
 
 interface Post {
@@ -35,64 +35,43 @@ const CommunityPage: React.FC = () => {
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-          alert("로그인한 사용자만 이용 가능합니다! 로그인해주세요!");
-          navigate("/");
-          return;
-        }
-
-        const userResponse = await axios.get(
-          `${backendUrl}/api/get-user-name`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setUserName(userResponse.data);
-
-        const postsResponse = await axios.get<Post[]>(
-          `${backendUrl}/api/posts`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setIsAuthenticated(true);
-        setPosts(postsResponse.data);
-        setPostCount(
-          postsResponse.data.filter((post) => post.author === userResponse.data)
-            .length
-        );
-      } catch (error) {
-        if (
-          axios.isAxiosError(error) &&
-          error.response &&
-          error.response.status === 401
-        ) {
-          try {
-            const newToken = await refreshAccessToken();
-            localStorage.setItem("accessToken", newToken);
-            await fetchData(); // Retry fetching data with the new token
-          } catch (refreshError) {
-            alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-            navigate("/");
-          }
-        } else {
-          console.error("Error fetching data", error);
-        }
+  const fetchData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("로그인한 사용자만 이용 가능합니다! 로그인해주세요!");
+        navigate("/");
+        return;
       }
-    };
 
+      const userResponse = await axios.get(`${backendUrl}/api/get-user-name`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserName(userResponse.data);
+
+      const postsResponse = await axios.get<Post[]>(`${backendUrl}/api/posts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setIsAuthenticated(true);
+      setPosts(postsResponse.data);
+      setPostCount(
+        postsResponse.data.filter((post) => post.author === userResponse.data)
+          .length
+      );
+    } catch (error) {
+      await handleTokenError(error, fetchData);
+    }
+  }, [backendUrl, navigate]);
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const fetchPosts = async () => {
     try {
@@ -113,22 +92,7 @@ const CommunityPage: React.FC = () => {
         response.data.filter((post) => post.author === userName).length
       );
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.status === 401
-      ) {
-        try {
-          const newToken = await refreshAccessToken();
-          localStorage.setItem("accessToken", newToken);
-          await fetchPosts(); // Retry fetching the posts with the new token
-        } catch (refreshError) {
-          alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-          navigate("/");
-        }
-      } else {
-        console.error("Error fetching posts", error);
-      }
+      await handleTokenError(error, fetchPosts);
     }
   };
 
@@ -161,22 +125,7 @@ const CommunityPage: React.FC = () => {
       handleCloseModal();
       setNewPost({ title: "", content: "" });
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.status === 401
-      ) {
-        try {
-          const newToken = await refreshAccessToken();
-          localStorage.setItem("accessToken", newToken);
-          await handleSubmit();
-        } catch (refreshError) {
-          alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-          navigate("/");
-        }
-      } else {
-        console.error("Error creating post", error);
-      }
+      await handleTokenError(error, handleSubmit);
     }
   };
 
@@ -207,7 +156,7 @@ const CommunityPage: React.FC = () => {
               onClick={handleShowModal}
               className="mt-2"
             >
-              Create New Post
+              글쓰기
             </Button>
           </Col>
           <Col md={9}>

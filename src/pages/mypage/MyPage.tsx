@@ -1,12 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import LoginedNavBar from "../../components/navbar/LoginedNavBar";
-import NavMenuBar from "../../components/navbar/NavMenuBar";
-import { refreshAccessToken } from "../../auth/refreshAccessToken";
-import "./MyPage.scss";
-
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,6 +8,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
+import LoginedNavBar from "../../components/navbar/LoginedNavBar";
+import NavMenuBar from "../../components/navbar/NavMenuBar";
+import { handleTokenError } from "../../auth/tokenService";
+import "./MyPage.scss";
 
 interface ProfileData {
   userName: string;
@@ -42,7 +40,7 @@ const MyPage: React.FC = () => {
     rate: "",
   });
 
-  const fetchProfileData = async (): Promise<void> => {
+  const fetchProfileData = useCallback(async (): Promise<void> => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -50,7 +48,6 @@ const MyPage: React.FC = () => {
         navigate("/");
         return;
       }
-
       const roleResponse = await axios.get<string>(
         `${process.env.REACT_APP_BACKEND_URL}/api/check-user-role`,
         {
@@ -78,7 +75,6 @@ const MyPage: React.FC = () => {
             },
           }
         );
-
         const profileData = profileResponse.data;
         setProfileData({
           userName: profileData.userName,
@@ -93,28 +89,13 @@ const MyPage: React.FC = () => {
         });
       }
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.status === 401
-      ) {
-        try {
-          const newToken = await refreshAccessToken();
-          localStorage.setItem("accessToken", newToken);
-          await fetchProfileData(); // Retry fetching the profile data with the new token
-        } catch (refreshError) {
-          alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-          navigate("/");
-        }
-      } else {
-        console.error("Error fetching profile data", error);
-      }
+      await handleTokenError(error, fetchProfileData);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchProfileData();
-  }, []);
+  }, [fetchProfileData]);
 
   return (
     <>

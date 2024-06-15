@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Badge from "react-bootstrap/Badge";
-// import "./Notice.scss";
+import "./Notice.scss";
 
 const notices = [
   {
@@ -27,7 +27,7 @@ const Notice: React.FC = () => {
       <Row>
         {notices.map((notice, index) => (
           <Col md={4} key={index} className="mb-4">
-            <Card>
+            <Card className="notice-card">
               <Card.Body>
                 <Badge>공지</Badge>
                 <Card.Title>{notice.title}</Card.Title>
