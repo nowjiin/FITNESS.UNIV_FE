@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import CryptoJS from "crypto-js";
-import { MentorProfile } from "../findmentor/MentorProfile";
 import "./Paybutton.scss";
 
 // 글로벌 윈도우 객체에 SettlePay를 선언
@@ -11,7 +10,11 @@ declare global {
   }
 }
 
-const PaymentComponent: React.FC = () => {
+interface PayButtonProps {
+  rate: string; // Add rate prop type
+}
+
+const PaymentComponent: React.FC<PayButtonProps> = ({ rate }) => {
   useEffect(() => {
     // 컴포넌트가 마운트될 때 SettlePay.js 스크립트를 동적으로 로드
     const script = document.createElement("script");
@@ -49,9 +52,11 @@ const PaymentComponent: React.FC = () => {
     console.log(trDay);
     console.log(trTime);
     console.log(ordNo);
+    // "30,000원" 형식의 rate를 "30000"으로 변환
+    const numericRate = rate.replace(/[^0-9]/g, "");
 
     // 결제에 필요한 파라미터 정의
-    const rawSignature = `M2266045${ordNo}${trDay}${trTime}1SETTLEBANKISGOODSETTLEBANKISGOOD`;
+    const rawSignature = `M2266045${ordNo}${trDay}${trTime}${numericRate}SETTLEBANKISGOODSETTLEBANKISGOOD`;
     const hashedSignature = CryptoJS.SHA256(rawSignature).toString(
       CryptoJS.enc.Hex
     );
@@ -64,7 +69,7 @@ const PaymentComponent: React.FC = () => {
       ordNo: ordNo,
       trDay: trDay,
       trTime: trTime,
-      trPrice: "1", // 필요에 따라 암호화된 값
+      trPrice: numericRate, // 필요에 따라 암호화된 값
       productNm: "pt1회권",
       dutyFreeYn: "N",
       callbackUrl: `${process.env.REACT_APP_BACKEND_URL}/paybutton`,
