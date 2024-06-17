@@ -18,6 +18,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ChatButton from "./components/common/ChatButton";
 import CommunityPage from "./pages/community/CommunityPage";
 import MentorProfileDetailPage from "./pages/findmentor/MentorProfileDetailPage";
+import MenteeProfileDetailPage from "./pages/findmentee/MenteeProfileDetailPage";
 function App() {
   return (
     <>
@@ -39,6 +40,7 @@ function App() {
           <Route path="/chatbutton" element={<ChatButton />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/findmentor/:id" element={<MentorProfileDetailPage />} />
+          <Route path="/findmentee/:id" element={<MenteeProfileDetailPage />} />
         </Routes>
       </Router>
     </>
