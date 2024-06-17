@@ -5,7 +5,6 @@ import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavBar from "../../components/navbar/NavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
@@ -151,13 +150,19 @@ const CommunityPage: React.FC = () => {
                 </div>
               </Card.Body>
             </Card>
-            <Button
-              variant="primary"
-              onClick={handleShowModal}
-              className="mt-2"
-            >
-              글쓰기
-            </Button>
+            <button className="noselect write-btn" onClick={handleShowModal}>
+              <span className="text">글쓰기</span>
+              <span className="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zm18.71-11.71a1.004 1.004 0 0 0 0-1.42l-2.83-2.83a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+                </svg>
+              </span>
+            </button>
           </Col>
           <Col md={9}>
             <Notice />
