@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import CryptoJS from "crypto-js";
+import { MentorProfile } from "../findmentor/MentorProfile";
+import "./Paybutton.scss";
 
 // 글로벌 윈도우 객체에 SettlePay를 선언
 declare global {
@@ -96,9 +98,25 @@ const PaymentComponent: React.FC = () => {
   return (
     <div>
       {/* 결제하기 버튼 */}
-      <Button variant="outline-success" onClick={handlePayment}>
-        결제하기
-      </Button>
+      <div className="unique-container" onClick={handlePayment}>
+        <div className="unique-left-side">
+          <div className="unique-card">
+            <div className="unique-card-line"></div>
+            <div className="unique-buttons"></div>
+          </div>
+          <div className="unique-post">
+            <div className="unique-post-line"></div>
+            <div className="unique-screen">
+              <div className="unique-dollar">$</div>
+            </div>
+            <div className="unique-numbers"></div>
+            <div className="unique-numbers-line2"></div>
+          </div>
+        </div>
+        <div className="unique-right-side">
+          <div className="unique-new">결제하기</div>
+        </div>
+      </div>
     </div>
   );
 };

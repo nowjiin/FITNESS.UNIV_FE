@@ -8,7 +8,7 @@ import LoginedPage from "./pages/home/LoginedPage";
 import RoleSelectPage from "./pages/role/RoleSelect";
 import MentorPage from "./pages/mentor/MentorPage";
 import MenteePage from "./pages/mentee/MenteePage";
-import Paybutton from "./components/payment/Paybuttom";
+import Paybutton from "./components/payment/PayButton";
 import PaymentSuccessPage from "./pages/paymentsuccess/Success";
 import RefundButton from "./components/refund/Refundbutton";
 import FindMenteePage from "./pages/findmentee/FindMenteePage";
