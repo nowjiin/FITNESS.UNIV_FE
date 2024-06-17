@@ -126,7 +126,7 @@ function RoleSelectPage() {
               </p>
             </div>
             <img
-              src="trainer-icon.png"
+              src="../../img/undraw_personal_trainer_re_cnua.svg"
               alt="트레이너 아이콘"
               className="img-fluid icon"
             />
@@ -144,7 +144,7 @@ function RoleSelectPage() {
               </p>
             </div>
             <img
-              src="student-icon.png"
+              src="../../img/undraw_energizer_re_vhjv.svg"
               alt="수강생 아이콘"
               className="img-fluid icon"
             />
