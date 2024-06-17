@@ -12,8 +12,8 @@ import { MentorProfile } from "../../components/findmentor/MentorProfile";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import MentorDetailCard from "../../components/findmentor/MentorDetailCard";
-import ChatButtonMentor from "../../components/common/ChatButtonMentor"; // 경로를 조정하세요
-import PaymentComponent from "../../components/payment/PayButton";
+import ChatButtonMentor from "../../components/common/ChatButtonMentor";
+import PayButton from "../../components/payment/PayButton";
 
 const MentorProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -23,7 +23,6 @@ const MentorProfileDetailPage: React.FC = () => {
   useEffect(() => {
     const fetchMentorDetail = async () => {
       if (!id) {
-        // id가 없는 경우 처리
         alert("잘못된 접근입니다. 메인 페이지로 이동합니다.");
         navigate("/");
         return;
@@ -97,7 +96,6 @@ const MentorProfileDetailPage: React.FC = () => {
             {id && (
               <ChatButtonMentor mentorId={id} mentorName={mentor.userName} />
             )}
-            <PaymentComponent />
           </Col>
           <Col>
             <MentorDetailCard mentor={mentor} onBack={() => navigate(-1)} />

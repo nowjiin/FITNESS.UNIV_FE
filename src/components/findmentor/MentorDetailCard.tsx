@@ -2,7 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { MentorProfile } from "./MentorProfile";
-// import "./MentorDetailCard.scss"; // 필요한 경우 스타일을 추가할 수 있습니다.
+import PayButton from "../payment/PayButton"; // Import PaymentComponent
 
 interface MentorDetailCardProps {
   mentor: MentorProfile;
@@ -29,6 +29,7 @@ const MentorDetailCard: React.FC<MentorDetailCardProps> = ({
           <Card.Text>
             <strong>Description:</strong> {mentor.certifications}
           </Card.Text>
+          <PayButton rate={mentor.rate} /> {/* Pass mentor.rate as prop */}
         </Card.Body>
         <Card.Footer>
           <Button onClick={onBack}>Back</Button>
