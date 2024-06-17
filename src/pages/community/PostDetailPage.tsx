@@ -102,7 +102,7 @@ const PostDetailPage: React.FC = () => {
           },
         }
       );
-      navigate("/posts");
+      navigate("/community");
     } catch (error) {
       await handleTokenError(error, handleDelete);
     }
@@ -164,8 +164,6 @@ const PostDetailPage: React.FC = () => {
                     <Card.Text>{post.content}</Card.Text>
                     <Card.Footer className="text-muted">
                       작성일: {new Date(post.createdAt).toLocaleString()}
-                      <br />
-                      수정일: {new Date(post.updatedAt).toLocaleString()}
                     </Card.Footer>
                     <Button
                       variant="primary"

@@ -57,11 +57,15 @@ const CommunityPage: React.FC = () => {
         },
       });
 
+      const sortedPosts = postsResponse.data.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
       setIsAuthenticated(true);
-      setPosts(postsResponse.data);
+      setPosts(sortedPosts);
       setPostCount(
-        postsResponse.data.filter((post) => post.author === userResponse.data)
-          .length
+        sortedPosts.filter((post) => post.author === userResponse.data).length
       );
     } catch (error) {
       await handleTokenError(error, fetchData);
@@ -71,29 +75,6 @@ const CommunityPage: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const fetchPosts = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        alert("로그인한 사용자만 이용 가능합니다! 로그인해주세요!");
-        navigate("/");
-        return;
-      }
-      const response = await axios.get<Post[]>(`${backendUrl}/api/posts`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setIsAuthenticated(true);
-      setPosts(response.data);
-      setPostCount(
-        response.data.filter((post) => post.author === userName).length
-      );
-    } catch (error) {
-      await handleTokenError(error, fetchPosts);
-    }
-  };
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -111,7 +92,7 @@ const CommunityPage: React.FC = () => {
     try {
       const token = localStorage.getItem("accessToken");
 
-      await axios.post(
+      const response = await axios.post(
         `${backendUrl}/api/posts`,
         { ...newPost, author: userName },
         {
@@ -120,7 +101,20 @@ const CommunityPage: React.FC = () => {
           },
         }
       );
-      fetchPosts();
+
+      const createdPost = response.data;
+
+      // 기존 posts 상태에 새로 생성된 글을 추가하고 정렬
+      const updatedPosts = [createdPost, ...posts].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setPosts(updatedPosts);
+      setPostCount(
+        updatedPosts.filter((post) => post.author === userName).length
+      );
+
       handleCloseModal();
       setNewPost({ title: "", content: "" });
     } catch (error) {
