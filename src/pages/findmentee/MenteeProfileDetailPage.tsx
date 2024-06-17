@@ -13,7 +13,6 @@ import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import MenteeDetailCard from "../../components/findmentee/MenteeDetailCard";
 import ChatButtonMentor from "../../components/common/ChatButtonMentor"; // 경로를 조정하세요
-import PaymentComponent from "../../components/payment/PayButton";
 
 const MenteeProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -96,7 +95,6 @@ const MenteeProfileDetailPage: React.FC = () => {
             {id && (
               <ChatButtonMentor mentorId={id} mentorName={mentee.userName} />
             )}
-            <PaymentComponent />
           </Col>
           <Col>
             <MenteeDetailCard mentee={mentee} onBack={() => navigate(-1)} />
