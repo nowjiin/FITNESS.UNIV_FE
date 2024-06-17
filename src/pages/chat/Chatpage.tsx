@@ -4,6 +4,12 @@ import "../chat/Chatpage.scss";
 import profileImage from "../../assets/chat/profile.png";
 import "font-awesome/css/font-awesome.min.css"; // FontAwesome Icons
 import axios from "axios"; // axios import
+import {
+  getToken,
+  setToken,
+  refreshAccessToken,
+  handleTokenError,
+} from "../../auth/tokenService"; // Token Service import
 
 interface ChatData {
   sender: string;
@@ -22,9 +28,55 @@ const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Axios 인터셉터 설정
+    const requestInterceptor = axios.interceptors.request.use(
+      async (config) => {
+        let token = getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      async (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          try {
+            const newToken = await refreshAccessToken();
+            setToken(newToken);
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return axios(originalRequest);
+          } catch (err) {
+            console.error("Error refreshing token:", err);
+            alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
+            window.location.href = "/"; // Redirect to login
+            return Promise.reject(err);
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // 컴포넌트 언마운트 시 인터셉터 제거
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = localStorage.getItem("refreshToken");
+        const token = getToken();
         console.log("Token being sent:", `Bearer ${token}`);
 
         const response = await axios.get(
@@ -90,7 +142,7 @@ const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
   useEffect(() => {
     if (roomNum && userId) {
       const eventSource = new EventSource(
-        `http://localhost:8080/chat/roomNum/${roomNum}`
+        `${process.env.REACT_APP_BACKEND_URL}/chat/roomNum/${roomNum}`
       );
 
       eventSource.onmessage = (event) => {
@@ -120,7 +172,7 @@ const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
         msg: msgInput.value,
       };
 
-      await axios.post("http://localhost:8080/chat", chat, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/chat`, chat, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
@@ -163,8 +215,8 @@ const Chatpage: React.FC<ChatpageProps> = ({ roomNum, handleBackClick }) => {
       <div className="row">
         <div className="col-sm-12">
           <div id="user_chat_data" className="user_chat_data">
+            <button onClick={handleBackClick}>뒤로가기</button>
             <div className="profile_name">
-              <button onClick={handleBackClick}>뒤로가기</button>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <img
                 src={profileImage}

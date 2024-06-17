@@ -2,10 +2,7 @@
   font-weight: bold;
 
   .navbar-logo {
-    border-radius: 5px;
-    padding: 10px 50px;
-    background: #1db5be;
-    color: #fff;
+    color: #1db5be;
     font-size: 2rem; /* Default font size for larger screens */
   }
 
@@ -19,7 +16,6 @@
   @media (max-width: 375px) {
     .navbar-logo {
       font-size: 1.2rem; /* Smaller font size for very small screens */
-      padding: 5px 25px; /* Adjust padding for smaller screens */
     }
 
     .SignUpBtn,
@@ -33,7 +29,6 @@
   @media (min-width: 376px) and (max-width: 576px) {
     .navbar-logo {
       font-size: 1.5rem; /* Smaller font size for small screens */
-      padding: 5px 35px; /* Adjust padding for small screens */
     }
 
     .SignUpBtn,
@@ -47,7 +42,6 @@
   @media (min-width: 577px) and (max-width: 768px) {
     .navbar-logo {
       font-size: 1.75rem; /* Adjusted font size for medium screens */
-      padding: 8px 40px; /* Adjust padding for medium screens */
     }
 
     .SignUpBtn,
@@ -61,7 +55,6 @@
   @media (min-width: 769px) and (max-width: 992px) {
     .navbar-logo {
       font-size: 1.875rem; /* Adjusted font size for large screens */
-      padding: 10px 45px; /* Adjust padding for large screens */
     }
 
     .SignUpBtn,
@@ -75,7 +68,6 @@
   @media (min-width: 993px) {
     .navbar-logo {
       font-size: 2rem; /* Default font size for extra large screens */
-      padding: 10px 50px; /* Default padding for extra large screens */
     }
 
     .SignUpBtn,

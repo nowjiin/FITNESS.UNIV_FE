@@ -8,21 +8,21 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { getToken, handleTokenError } from "../../auth/tokenService";
-import { MentorProfile } from "../../components/findmentor/MentorProfile";
+import { MenteeProfile } from "../../components/findmentee/MenteeProfile";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
-import MentorDetailCard from "../../components/findmentor/MentorDetailCard";
-import ChatButtonMentor from "../../components/common/ChatButtonMentor";
-import PayButton from "../../components/payment/PayButton";
+import MenteeDetailCard from "../../components/findmentee/MenteeDetailCard";
+import ChatButtonMentor from "../../components/common/ChatButtonMentor"; // 경로를 조정하세요
 
-const MentorProfileDetailPage: React.FC = () => {
+const MenteeProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
-  const [mentor, setMentor] = useState<MentorProfile | null>(null);
+  const [mentee, setMentee] = useState<MenteeProfile | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchMentorDetail = async () => {
+    const fetchMenteeDetail = async () => {
       if (!id) {
+        // id가 없는 경우 처리
         alert("잘못된 접근입니다. 메인 페이지로 이동합니다.");
         navigate("/");
         return;
@@ -37,23 +37,23 @@ const MentorProfileDetailPage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/mentor/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/mentee/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setMentor(response.data);
+        setMentee(response.data);
       } catch (error) {
-        await handleTokenError(error, fetchMentorDetail);
+        await handleTokenError(error, fetchMenteeDetail);
       }
     };
 
-    fetchMentorDetail();
+    fetchMenteeDetail();
   }, [id, navigate]);
 
-  if (!mentor) {
+  if (!mentee) {
     return <div>Loading...</div>;
   }
 
@@ -82,28 +82,26 @@ const MentorProfileDetailPage: React.FC = () => {
                     alt="profile"
                     className="user-image m-0"
                   />
-                  <Card.Title>{mentor.userName}</Card.Title>
+                  <Card.Title>{mentee.userName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    {mentor.university}
+                    대학{" "}
                   </Card.Subtitle>
-                  <Badge bg="success m-0">{mentor.gender}</Badge>
+                  <Badge bg="success m-0">{mentee.gender}</Badge>
                   <br></br>
-                  <Badge bg="success m-0">트레이너</Badge>
-                  <div>{mentor.enrollmentStatus}</div>
+                  <Badge bg="success m-0">수강생</Badge>
                 </div>
               </Card.Body>
             </Card>
             {id && (
-              <ChatButtonMentor mentorId={id} mentorName={mentor.userName} />
+              <ChatButtonMentor mentorId={id} mentorName={mentee.userName} />
             )}
           </Col>
           <Col>
-            <MentorDetailCard mentor={mentor} onBack={() => navigate(-1)} />
+            <MenteeDetailCard mentee={mentee} onBack={() => navigate(-1)} />
           </Col>
         </Row>
       </Container>
     </>
   );
 };
-
-export default MentorProfileDetailPage;
+export default MenteeProfileDetailPage;

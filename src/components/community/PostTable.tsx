@@ -43,8 +43,6 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
             </Card.Body>
             <Card.Footer className="text-muted">
               작성일: {new Date(post.createdAt).toLocaleString()}
-              <br />
-              수정일: {new Date(post.updatedAt).toLocaleString()}
             </Card.Footer>
           </Card>
         </Col>

@@ -8,7 +8,6 @@ import LoginedPage from "./pages/home/LoginedPage";
 import RoleSelectPage from "./pages/role/RoleSelect";
 import MentorPage from "./pages/mentor/MentorPage";
 import MenteePage from "./pages/mentee/MenteePage";
-import Paybutton from "./components/payment/Paybuttom";
 import PaymentSuccessPage from "./pages/paymentsuccess/Success";
 import RefundButton from "./components/refund/Refundbutton";
 import FindMenteePage from "./pages/findmentee/FindMenteePage";
@@ -18,6 +17,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ChatButton from "./components/common/ChatButton";
 import CommunityPage from "./pages/community/CommunityPage";
 import MentorProfileDetailPage from "./pages/findmentor/MentorProfileDetailPage";
+import MenteeProfileDetailPage from "./pages/findmentee/MenteeProfileDetailPage";
+import PostDetailPage from "./pages/community/PostDetailPage";
 function App() {
   return (
     <>
@@ -30,7 +31,6 @@ function App() {
           <Route path="/role" element={<RoleSelectPage />} />
           <Route path="/mentor" element={<MentorPage />} />
           <Route path="/mentee" element={<MenteePage />} />
-          <Route path="/paybutton" element={<Paybutton />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/refund" element={<RefundButton />} />
           <Route path="/findmentee" element={<FindMenteePage />} />
@@ -39,6 +39,8 @@ function App() {
           <Route path="/chatbutton" element={<ChatButton />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/findmentor/:id" element={<MentorProfileDetailPage />} />
+          <Route path="/findmentee/:id" element={<MenteeProfileDetailPage />} />
+          <Route path="/posts/:id" element={<PostDetailPage />} />
         </Routes>
       </Router>
     </>

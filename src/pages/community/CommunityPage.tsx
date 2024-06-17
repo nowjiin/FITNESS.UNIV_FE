@@ -5,7 +5,6 @@ import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavBar from "../../components/navbar/NavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
@@ -58,11 +57,15 @@ const CommunityPage: React.FC = () => {
         },
       });
 
+      const sortedPosts = postsResponse.data.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
       setIsAuthenticated(true);
-      setPosts(postsResponse.data);
+      setPosts(sortedPosts);
       setPostCount(
-        postsResponse.data.filter((post) => post.author === userResponse.data)
-          .length
+        sortedPosts.filter((post) => post.author === userResponse.data).length
       );
     } catch (error) {
       await handleTokenError(error, fetchData);
@@ -72,29 +75,6 @@ const CommunityPage: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const fetchPosts = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        alert("로그인한 사용자만 이용 가능합니다! 로그인해주세요!");
-        navigate("/");
-        return;
-      }
-      const response = await axios.get<Post[]>(`${backendUrl}/api/posts`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setIsAuthenticated(true);
-      setPosts(response.data);
-      setPostCount(
-        response.data.filter((post) => post.author === userName).length
-      );
-    } catch (error) {
-      await handleTokenError(error, fetchPosts);
-    }
-  };
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -112,7 +92,7 @@ const CommunityPage: React.FC = () => {
     try {
       const token = localStorage.getItem("accessToken");
 
-      await axios.post(
+      const response = await axios.post(
         `${backendUrl}/api/posts`,
         { ...newPost, author: userName },
         {
@@ -121,7 +101,20 @@ const CommunityPage: React.FC = () => {
           },
         }
       );
-      fetchPosts();
+
+      const createdPost = response.data;
+
+      // 기존 posts 상태에 새로 생성된 글을 추가하고 정렬
+      const updatedPosts = [createdPost, ...posts].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setPosts(updatedPosts);
+      setPostCount(
+        updatedPosts.filter((post) => post.author === userName).length
+      );
+
       handleCloseModal();
       setNewPost({ title: "", content: "" });
     } catch (error) {
@@ -151,13 +144,19 @@ const CommunityPage: React.FC = () => {
                 </div>
               </Card.Body>
             </Card>
-            <Button
-              variant="primary"
-              onClick={handleShowModal}
-              className="mt-2"
-            >
-              글쓰기
-            </Button>
+            <button className="noselect write-btn" onClick={handleShowModal}>
+              <span className="text">글쓰기</span>
+              <span className="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zm18.71-11.71a1.004 1.004 0 0 0 0-1.42l-2.83-2.83a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+                </svg>
+              </span>
+            </button>
           </Col>
           <Col md={9}>
             <Notice />

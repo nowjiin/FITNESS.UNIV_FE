@@ -6,9 +6,15 @@ interface ChatModalProps {
   show: boolean;
   handleClose: () => void;
   rooms: { roomNum: string }[];
+  mentorName: string;
 }
 
-const ChatModal: React.FC<ChatModalProps> = ({ show, handleClose, rooms }) => {
+const ChatModalMentor: React.FC<ChatModalProps> = ({
+  show,
+  handleClose,
+  rooms,
+  mentorName,
+}) => {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   const handleRoomClick = (roomNum: string) => {
@@ -35,7 +41,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ show, handleClose, rooms }) => {
               >
                 <img src="profile-image-url.jpg" alt="Profile" />
                 <div className="profile-info">
-                  <h2>내 채팅방</h2>
+                  <h2>{mentorName} 강사님과의 채팅방</h2>
                   <p>Status Message</p>
                 </div>
               </div>
@@ -47,4 +53,4 @@ const ChatModal: React.FC<ChatModalProps> = ({ show, handleClose, rooms }) => {
   );
 };
 
-export default ChatModal;
+export default ChatModalMentor;
