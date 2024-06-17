@@ -106,7 +106,7 @@ const ChatButton: React.FC = () => {
 
   return (
     <div>
-      <button onClick={handleChatButtonClick}>
+      <button className="chat-btn" onClick={handleChatButtonClick}>
         <div className="svg-wrapper-1">
           <div className="svg-wrapper">
             <svg
