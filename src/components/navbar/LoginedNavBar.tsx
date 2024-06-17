@@ -21,7 +21,7 @@ function LoginedNavBar() {
       <Navbar collapseOnSelect expand="sm" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand className="navbar-logo" href="/">
-            LOGO
+            FITNESS.UNIV
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
