@@ -54,11 +54,11 @@
 .cancel-btn:hover .icon {
   width: 90px;
   border-left: none;
-  transform: translateX(0);
+  transform: translateX(0px);
 }
 
 .cancel-btn:focus {
-  outline: none;
+  outline: none !important;
 }
 
 .cancel-btn:active .icon svg {
