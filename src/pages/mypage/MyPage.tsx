@@ -10,6 +10,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
+import EditProfileModal from "./EditProfileModal";
 import { handleTokenError } from "../../auth/tokenService";
 import "./MyPage.scss";
 
@@ -55,6 +56,42 @@ const MyPage: React.FC = () => {
     location.state?.mentorName || null
   );
 
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleEditModalClose = () => setShowEditModal(false);
+  const handleEditModalShow = () => setShowEditModal(true);
+
+  const handleSaveProfileData = async (updatedData: Partial<ProfileData>) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("로그인한 사용자만 이용 가능합니다!");
+        navigate("/");
+        return;
+      }
+
+      // API 요청으로 업데이트된 데이터를 서버에 전송
+      await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // 업데이트된 데이터를 상태에 반영
+      setProfileData((prevData) => ({
+        ...prevData,
+        ...updatedData,
+      }));
+      alert("프로필이 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      await handleTokenError(error, () => handleSaveProfileData(updatedData));
+      console.error("Error updating profile data:", error);
+    }
+  };
+
   const fetchProfileData = useCallback(async (): Promise<void> => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -94,7 +131,7 @@ const MyPage: React.FC = () => {
         setProfileData({
           userName: profileData.userName,
           university: profileData.university,
-          role: profileData.role,
+          role: role,
           details: profileData.details,
           certifications: profileData.certifications,
           enrollment_status: profileData.enrollment_status,
@@ -120,16 +157,6 @@ const MyPage: React.FC = () => {
         <Row>
           <Col md={3}>
             <Card className="profile-card mb-4 align-items-center">
-              <div className="d-flex justify-content-end w-100">
-                <Button
-                  variant=""
-                  className="m-2"
-                  size="sm"
-                  style={{ border: "1px solid rgba(0, 0, 0, 0.175)" }}
-                >
-                  정보 수정
-                </Button>
-              </div>
               <Card.Body className="align-items-center p-0">
                 <div className="text-center">
                   <img
@@ -169,8 +196,11 @@ const MyPage: React.FC = () => {
             <Card className="mb-4">
               <Card.Header>모집글</Card.Header>
               <Card.Body>
-                {profileData.details}{" "}
-                <Button variant="outline-primary">수정하기</Button>
+                {profileData.rate} <br />
+                {profileData.details}
+                <Button variant="outline-primary" onClick={handleEditModalShow}>
+                  수정하기
+                </Button>
               </Card.Body>
             </Card>
             <Card className="mb-4">
@@ -226,6 +256,13 @@ const MyPage: React.FC = () => {
           </Col>
         </Row>
       </Container>
+
+      <EditProfileModal
+        show={showEditModal}
+        handleClose={handleEditModalClose}
+        profileData={profileData}
+        onSave={handleSaveProfileData}
+      />
     </>
   );
 };
