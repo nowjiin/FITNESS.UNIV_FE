@@ -19,7 +19,6 @@ const exercisesByCategory: { [key: string]: string[] } = {
   헬스: [
     "PT/다이어트",
     "PT/근력 강화",
-    "PT/체중 증가",
     "PT/체력 증진",
     "PT/체형 교정",
     "PT/바디프로필",

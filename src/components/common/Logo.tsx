@@ -1,6 +1,11 @@
-import "./Logo.scss"; // 스타일 시트를 임포트합니다.
+import "./Logo.scss";
 
 function Logo() {
-  return <div className="logo">FITNESS.UNIV</div>;
+  return (
+    <div className="logo-container">
+      <img className="logo-img" src="../../icons/logo32x32.png" alt="logo" />
+      <div className="logo-text">FITNESS.UNIV</div>
+    </div>
+  );
 }
 export default Logo;

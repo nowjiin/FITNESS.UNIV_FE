@@ -14,8 +14,8 @@ const MentorStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
   const [rate, setRate] = useState<string>(data.rate || "");
   const [details, setDetails] = useState<string>(data.details || "");
   const [charCount, setCharCount] = useState<number>(details.length);
-  const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [isHintVisible, setIsHintVisible] = useState<boolean>(false); // 힌트 가시성 상태
 
   const handleNext = () => {
     if (!rate && !details) {
@@ -30,8 +30,8 @@ const MentorStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
     onPrev({ rate, details });
   };
 
-  const toggleTooltip = () => {
-    setIsTooltipVisible(!isTooltipVisible);
+  const toggleHint = () => {
+    setIsHintVisible(!isHintVisible);
   };
 
   return (
@@ -64,13 +64,21 @@ const MentorStep4: React.FC<Props> = ({ onNext, onPrev, data }) => {
           rows={10}
         />
         <div className="d-flex justify-content-between mt-2">
-          <div className="guide-text">
-            <img
-              src="./buttons/icon-help-circle.png"
-              alt="도움말"
-              className="help-icon"
-              onClick={toggleTooltip}
-            />
+          <div className="d-flex justify-content-center align-item-center">
+            <div className="item-hints">
+              <div
+                className={`hint ${isHintVisible ? "visible" : ""}`}
+                data-position="4"
+                onClick={toggleHint}
+              >
+                <span className="hint-radius"></span>
+                <span className="hint-dot">Tip</span>
+                <div className="hint-content do--split-children">
+                  <p>가격 선정의 기준을 자세히 작성해주시면 좋습니다.</p>
+                  <p>예: 강의 준비 시간, 자료 준비 비용 등</p>
+                </div>
+              </div>
+            </div>
             작성가이드
           </div>
           <div className="char-count">현재 {charCount}자 / 권장 100자 이상</div>

@@ -13,11 +13,11 @@ import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import MentorDetailCard from "../../components/findmentor/MentorDetailCard";
 import ChatButtonMentor from "../../components/common/ChatButtonMentor";
-import PayButton from "../../components/payment/PayButton";
 
 const MentorProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [mentor, setMentor] = useState<MentorProfile | null>(null);
+  const [paymentData, setPaymentData] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +51,22 @@ const MentorProfileDetailPage: React.FC = () => {
     };
 
     fetchMentorDetail();
-  }, [id, navigate]);
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === "navigate_to_mypage") {
+        const paymentData = event.data.data;
+        navigate("/Mypage", {
+          state: { paymentData, mentorName: mentor?.userName },
+        });
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [id, navigate, mentor?.userName]);
 
   if (!mentor) {
     return <div>Loading...</div>;
