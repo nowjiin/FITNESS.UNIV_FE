@@ -1,43 +1,112 @@
-.char-count {
-  font-weight: bold;
+.item-hints {
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.guide-text {
-  font-size: 14px;
-  color: #6c757d;
+.item-hints .hint {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-hints .hint-dot {
+  z-index: 3;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 50px; /* 크기 조절 */
+  height: 50px; /* 크기 조절 */
+  transform: translate(0%, 0%) scale(0.95);
+  margin: auto;
   display: flex;
   align-items: center;
-  .help-icon {
-    margin-right: 5px;
-    cursor: pointer;
-  }
-  .tooltip {
-    position: absolute;
-    left: 50%;
-    bottom: 125%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    white-space: nowrap;
-    font-size: 12px;
-    z-index: 10;
-    opacity: 1;
-    visibility: visible;
+  justify-content: center;
+  color: black;
+}
 
-    &::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -5px;
-      transform: translateX(-50%);
-      border-width: 5px;
-      border-style: solid;
-      border-color: #333 transparent;
-      z-index: 10;
-      opacity: 1;
-      visibility: visible;
-    }
-  }
+.item-hints .hint-radius {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -125px 0 0 -125px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+}
+
+.item-hints .hint[data-position="1"] .hint-content {
+  top: 85px;
+  left: 50%;
+  margin-left: 56px;
+}
+
+.item-hints .hint-content {
+  width: 300px;
+  position: absolute;
+  z-index: 5;
+  padding: 35px 0;
+  opacity: 0;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+  color: black;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.item-hints .hint.visible .hint-content, /* visible 클래스 추가 시 힌트 보이게 하기 */
+.item-hints .hint:hover .hint-content {
+  position: absolute;
+  z-index: 5;
+  padding: 35px 0;
+  opacity: 1;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+  color: black;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.item-hints .hint-content::before {
+  width: 0px;
+  bottom: 29px;
+  left: 0;
+  content: "";
+  background-color: black;
+  height: 1px;
+  position: absolute;
+  transition: width 0.4s;
+}
+
+.item-hints .hint.visible .hint-content::before, /* visible 클래스 추가 시 애니메이션 유지 */
+.item-hints .hint:hover .hint-content::before {
+  width: 180px;
+  transition: width 0.4s;
+}
+
+.item-hints .hint-content::after {
+  transform-origin: 0 50%;
+  transform: rotate(-225deg);
+  bottom: 29px;
+  left: 0;
+  width: 80px;
+  content: "";
+  background-color: black;
+  height: 1px;
+  position: absolute;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  transition-delay: 0s;
+}
+
+.item-hints .hint.visible .hint-content::after, /* visible 클래스 추가 시 애니메이션 유지 */
+.item-hints .hint:hover .hint-content::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.item-hints .hint[data-position="4"] .hint-content {
+  bottom: 85px;
+  left: 50%;
+  margin-left: 56px;
 }
