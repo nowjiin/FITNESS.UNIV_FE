@@ -17,6 +17,7 @@ import ChatButtonMentor from "../../components/common/ChatButtonMentor";
 const MentorProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [mentor, setMentor] = useState<MentorProfile | null>(null);
+  const [paymentData, setPaymentData] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,8 +53,11 @@ const MentorProfileDetailPage: React.FC = () => {
     fetchMentorDetail();
 
     const handleMessage = (event: MessageEvent) => {
-      if (event.data === "navigate_to_mypage") {
-        navigate("/Mypage");
+      if (event.data.type === "navigate_to_mypage") {
+        const paymentData = event.data.data;
+        navigate("/Mypage", {
+          state: { paymentData, mentorName: mentor?.userName },
+        });
       }
     };
 
@@ -62,7 +66,7 @@ const MentorProfileDetailPage: React.FC = () => {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, [id, navigate]);
+  }, [id, navigate, mentor?.userName]);
 
   if (!mentor) {
     return <div>Loading...</div>;

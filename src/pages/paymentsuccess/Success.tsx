@@ -76,8 +76,18 @@ const PaymentSuccessPage: React.FC = () => {
   }
 
   const handleReturn = () => {
-    // 부모 창에 메시지 전송
-    window.opener.postMessage("navigate_to_mypage", "*");
+    const paymentData = {
+      ordNo: paymentDetails.ordNo,
+      payPrice: paymentDetails.payPrice,
+      trDay: paymentDetails.trDay,
+      trTime: paymentDetails.trTime,
+    };
+
+    // 부모 창에 결제 데이터를 메시지로 전송
+    window.opener.postMessage(
+      { type: "navigate_to_mypage", data: paymentData },
+      "*"
+    );
     // 팝업 창 닫기
     window.close();
   };
@@ -112,9 +122,6 @@ const PaymentSuccessPage: React.FC = () => {
                     </p>
                     <p>
                       <strong>결제 시간:</strong> {paymentDetails.trTime}
-                    </p>
-                    <p>
-                      <strong>상태 메시지:</strong> {paymentDetails.resultMsg}
                     </p>
                   </div>
                 )}

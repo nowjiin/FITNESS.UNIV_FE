@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -25,9 +25,16 @@ interface ProfileData {
   rate: string;
 }
 
+interface PaymentData {
+  ordNo: string;
+  payPrice: string;
+  trDay: string;
+  trTime: string;
+}
+
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [profileData, setProfileData] = useState<ProfileData>({
     userName: "",
     university: "",
@@ -39,6 +46,14 @@ const MyPage: React.FC = () => {
     major: "",
     rate: "",
   });
+
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(
+    location.state?.paymentData || null
+  );
+
+  const [mentorName, setMentorName] = useState<string | null>(
+    location.state?.mentorName || null
+  );
 
   const fetchProfileData = useCallback(async (): Promise<void> => {
     try {
@@ -166,6 +181,30 @@ const MyPage: React.FC = () => {
                 <Button variant="outline-primary">바로가기</Button>
               </Card.Body>
             </Card>
+            {paymentData && (
+              <Card className="mb-4">
+                <Card.Header>결제 내역</Card.Header>
+                <Card.Body>
+                  <p>
+                    <strong>주문 번호:</strong> {paymentData.ordNo}
+                  </p>
+                  <p>
+                    <strong>결제 금액:</strong> {paymentData.payPrice} 원
+                  </p>
+                  <p>
+                    <strong>결제 날짜:</strong> {paymentData.trDay}
+                  </p>
+                  <p>
+                    <strong>결제 시간:</strong> {paymentData.trTime}
+                  </p>
+                  {mentorName && (
+                    <p>
+                      <strong>멘토 이름:</strong> {mentorName}
+                    </p>
+                  )}
+                </Card.Body>
+              </Card>
+            )}
             <Card className="mb-4">
               <Card.Header>멤버십</Card.Header>
               <Card.Body className="d-flex justify-content-between align-items-center">
