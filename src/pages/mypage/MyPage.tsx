@@ -196,8 +196,18 @@ const MyPage: React.FC = () => {
             <Card className="mb-4">
               <Card.Header>모집글</Card.Header>
               <Card.Body>
-                {profileData.rate} <br />
-                {profileData.details}
+                <div>
+                  1회 가격 : {profileData.rate} <br />
+                  내용
+                  <br />
+                  <br />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: profileData.details.replace(/\n/g, "<br />"),
+                    }}
+                  />
+                </div>
+
                 <Button variant="outline-primary" onClick={handleEditModalShow}>
                   수정하기
                 </Button>
