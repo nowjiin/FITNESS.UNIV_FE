@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import CryptoJS from "crypto-js";
 
 const PaymentSuccessPage: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
@@ -37,7 +37,7 @@ const PaymentSuccessPage: React.FC = () => {
       const hashedSignature = CryptoJS.SHA256(rawSignature).toString(
         CryptoJS.enc.Hex
       );
-
+      // API 요청에 필요한 파라미터 설정
       const parameters = {
         hdInfo: "IA_APPROV",
         apiVer: "3.0",
@@ -49,7 +49,7 @@ const PaymentSuccessPage: React.FC = () => {
       };
 
       console.log("Settlebank API 요청 파라미터:", parameters);
-
+      // 프록시를 사용하여 Settlebank API에 POST 요청
       axios
         .post(
           `${process.env.REACT_APP_BACKEND_URL}/proxy/settlebank`,
@@ -76,7 +76,10 @@ const PaymentSuccessPage: React.FC = () => {
   }
 
   const handleReturn = () => {
-    navigate("/Mypage");
+    // 부모 창에 메시지 전송
+    window.opener.postMessage("navigate_to_mypage", "*");
+    // 팝업 창 닫기
+    window.close();
   };
 
   return (
@@ -86,24 +89,39 @@ const PaymentSuccessPage: React.FC = () => {
           {error ? (
             <Alert variant="danger">{error}</Alert>
           ) : (
-            <Alert variant="success" className="mt-5">
-              <h4>결제가 완료되었습니다!</h4>
-              <p>
-                고객님의 결제가 성공적으로 처리되었습니다. 이용해 주셔서
-                감사합니다.
-              </p>
-              {paymentDetails && (
-                <div>
-                  <p>주문 번호: {paymentDetails.ordNo}</p>
-                  <p>결제 금액: {paymentDetails.payPrice} 원</p>
-                  <p>결제 날짜: {paymentDetails.trDay}</p>
-                  <p>결제 시간: {paymentDetails.trTime}</p>
-                  <p>상태 메시지: {paymentDetails.resultMsg}</p>
-                </div>
-              )}
-            </Alert>
+            <Card className="mt-5" border="success">
+              <Card.Header className="bg-success text-white">
+                결제가 완료되었습니다!
+              </Card.Header>
+              <Card.Body>
+                <Card.Title>결제 성공</Card.Title>
+                <Card.Text>
+                  고객님의 결제가 성공적으로 처리되었습니다. 이용해 주셔서
+                  감사합니다.
+                </Card.Text>
+                {paymentDetails && (
+                  <div>
+                    <p>
+                      <strong>주문 번호:</strong> {paymentDetails.ordNo}
+                    </p>
+                    <p>
+                      <strong>결제 금액:</strong> {paymentDetails.payPrice} 원
+                    </p>
+                    <p>
+                      <strong>결제 날짜:</strong> {paymentDetails.trDay}
+                    </p>
+                    <p>
+                      <strong>결제 시간:</strong> {paymentDetails.trTime}
+                    </p>
+                    <p>
+                      <strong>상태 메시지:</strong> {paymentDetails.resultMsg}
+                    </p>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
           )}
-          <Button variant="primary" onClick={handleReturn}>
+          <Button variant="primary" onClick={handleReturn} className="mt-3">
             마이페이지로 돌아가기
           </Button>
         </Col>

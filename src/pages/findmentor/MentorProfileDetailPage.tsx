@@ -13,7 +13,6 @@ import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import MentorDetailCard from "../../components/findmentor/MentorDetailCard";
 import ChatButtonMentor from "../../components/common/ChatButtonMentor";
-import PayButton from "../../components/payment/PayButton";
 
 const MentorProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -51,6 +50,18 @@ const MentorProfileDetailPage: React.FC = () => {
     };
 
     fetchMentorDetail();
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data === "navigate_to_mypage") {
+        navigate("/Mypage");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
   }, [id, navigate]);
 
   if (!mentor) {
