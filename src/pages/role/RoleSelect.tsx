@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import Logo from "../../components/common/Logo";
 import "./RoleSelect.scss";
 
 function RoleSelectPage() {
@@ -96,7 +96,7 @@ function RoleSelectPage() {
   return (
     <div className="role-select-page container text-center mt-5">
       <div className="mb-4">
-        <button className="btn btn-info">Logo</button>
+        <Logo />
       </div>
       <h2>회원가입</h2>
       <div className="card mx-auto mt-4 p-4" style={{ maxWidth: "600px" }}>
@@ -114,7 +114,7 @@ function RoleSelectPage() {
         <p>가입하실 유형을 선택해주세요.</p>
         <div className="list-group">
           <button
-            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-1"
             onClick={() => selectedRole("ROLE_MENTOR")}
           >
             <div>
@@ -132,7 +132,7 @@ function RoleSelectPage() {
             />
           </button>
           <button
-            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center mt-2"
+            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center mt-1"
             onClick={() => selectedRole("ROLE_MENTEE")}
           >
             <div>
