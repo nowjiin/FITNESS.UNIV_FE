@@ -1,7 +1,5 @@
 import "./NavBar.scss";
-
 import { useNavigate } from "react-router-dom";
-
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -18,7 +16,7 @@ function LoginedNavBar() {
 
   return (
     <div id="navbar-wrap">
-      <Navbar collapseOnSelect expand="sm" className="bg-body-tertiary">
+      <Navbar collapseOnSelect className="bg-body-tertiary">
         <Container>
           <Navbar.Brand className="navbar-logo" href="/">
             FITNESS.UNIV
