@@ -14,6 +14,7 @@ import EditProfileModal from "./EditProfileModal";
 import EditMenteeProfileModal from "./EditMenteeProfileModal";
 import { handleTokenError } from "../../auth/tokenService";
 import "./MyPage.scss";
+import ChatButton from "../../components/common/ChatButton";
 
 interface ProfileData {
   userName: string;
@@ -37,6 +38,7 @@ interface PaymentApprovalData {
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mentorId } = location.state || {};
   const [profileData, setProfileData] = useState<ProfileData>({
     userName: "",
     university: "",
@@ -51,6 +53,9 @@ const MyPage: React.FC = () => {
 
   const [isMentor, setIsMentor] = useState(false);
   const [paymentApprovals, setPaymentApprovals] = useState<
+    PaymentApprovalData[]
+  >([]);
+  const [mentorPaymentApprovals, setMentorPaymentApprovals] = useState<
     PaymentApprovalData[]
   >([]);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -109,9 +114,7 @@ const MyPage: React.FC = () => {
       );
 
       const role = roleResponse.data;
-      if (role === "ROLE_MENTOR") {
-        setIsMentor(role === "ROLE_MENTOR");
-      }
+      setIsMentor(role === "ROLE_MENTOR");
       setProfileData((prevState) => ({
         ...prevState,
         role: role,
@@ -141,21 +144,46 @@ const MyPage: React.FC = () => {
           rate: profileData.rate,
         });
 
-        const paymentResponse = await axios.get<PaymentApprovalData[]>(
-          `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const paymentRequests = [
+          axios.get<PaymentApprovalData[]>(
+            `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
+        ];
+
+        if (mentorId) {
+          paymentRequests.push(
+            axios.get<PaymentApprovalData[]>(
+              `${process.env.REACT_APP_BACKEND_URL}/payment/approval/mentor`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                params: {
+                  mentorId: mentorId,
+                },
+              }
+            )
+          );
+        }
+
+        const [menteePayments, mentorPayments] = await Promise.all(
+          paymentRequests
         );
 
-        setPaymentApprovals(paymentResponse.data);
+        setPaymentApprovals(menteePayments.data);
+        if (mentorPayments) {
+          setMentorPaymentApprovals(mentorPayments.data);
+        }
       }
     } catch (error) {
       await handleTokenError(error, fetchProfileData);
     }
-  }, [navigate]);
+  }, [navigate, mentorId]);
 
   useEffect(() => {
     fetchProfileData();
@@ -195,6 +223,7 @@ const MyPage: React.FC = () => {
               />
               <Card.Text className="ml-2">멤버십 Lv.0</Card.Text>
             </Card>
+            <ChatButton />
             <ListGroup>
               <ListGroup.Item action href="#">
                 과외 성사등록 안내
@@ -235,12 +264,10 @@ const MyPage: React.FC = () => {
               </Card.Body>
             </Card>
 
-            <Card className="mb-4">
-              <Card.Header>결제 내역</Card.Header>
-              <Card.Body>
-                {paymentApprovals.length === 0 ? (
-                  <p>결제 내역이 없습니다.</p>
-                ) : (
+            {paymentApprovals.length > 0 && (
+              <Card className="mb-4">
+                <Card.Header>결제 내역</Card.Header>
+                <Card.Body>
                   <ListGroup>
                     {paymentApprovals.map((approval, index) => (
                       <ListGroup.Item key={index}>
@@ -254,9 +281,30 @@ const MyPage: React.FC = () => {
                       </ListGroup.Item>
                     ))}
                   </ListGroup>
-                )}
-              </Card.Body>
-            </Card>
+                </Card.Body>
+              </Card>
+            )}
+
+            {mentorPaymentApprovals.length > 0 && (
+              <Card className="mb-4">
+                <Card.Header>멘토 결제 내역</Card.Header>
+                <Card.Body>
+                  <ListGroup>
+                    {mentorPaymentApprovals.map((approval, index) => (
+                      <ListGroup.Item key={index}>
+                        <strong>결제 금액:</strong> {approval.payPrice} 원
+                        <br />
+                        <strong>수강생 이름:</strong> {approval.mentorUserName}
+                        <br />
+                        <strong>결제 날짜:</strong> {approval.trDay}
+                        <br />
+                        <strong>거래 번호:</strong> {approval.trNo}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Card.Body>
+              </Card>
+            )}
 
             <Card className="mb-4">
               <Card.Header>멤버십</Card.Header>
