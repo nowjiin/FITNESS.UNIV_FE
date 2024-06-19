@@ -56,6 +56,7 @@ const MentorProfileDetailPage: React.FC = () => {
       if (event.data.type === "navigate_to_mypage") {
         const paymentDetails = event.data.paymentDetails || {};
         paymentDetails.mentorUserName = mentor?.userName;
+        paymentDetails.mentorId = id;
         console.log("Updated Payment Details:", paymentDetails);
 
         try {
@@ -69,7 +70,7 @@ const MentorProfileDetailPage: React.FC = () => {
               },
             }
           );
-          navigate("/Mypage");
+          navigate("/Mypage", { state: { mentorId: id } });
         } catch (error) {
           console.error("Payment approval error:", error);
           alert("결제 승인 요청에 실패했습니다.");
