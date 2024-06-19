@@ -29,7 +29,7 @@ const MenteeStep5: React.FC<Props> = ({ onComplete, onPrev, data }) => {
   return (
     <div className="mentor-step-page container text-center p-0">
       <div className="mx-auto text-start">
-        <div className="input-title">수업하시는 분의 연령대를 알려주세요</div>
+        <div className="input-title">수강하는 분의 연령대를 알려주세요</div>
         <FormRadioGroup
           options={[
             "사회인",
