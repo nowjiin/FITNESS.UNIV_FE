@@ -95,17 +95,7 @@ const MentorProfileDetailPage: React.FC = () => {
       <Container className="mentor-profile-detail-page mt-4">
         <Row>
           <Col md={3}>
-            <Card className="profile-card mb-4 align-items-center">
-              <div className="d-flex justify-content-end w-100">
-                <Button
-                  variant=""
-                  className="m-2"
-                  size="sm"
-                  style={{ border: "1px solid rgba(0, 0, 0, 0.175)" }}
-                >
-                  정보 수정
-                </Button>
-              </div>
+            <Card className="profile-card mb-4 p-3 align-items-center">
               <Card.Body className="align-items-center p-0">
                 <div className="text-center">
                   <img
@@ -115,12 +105,11 @@ const MentorProfileDetailPage: React.FC = () => {
                   />
                   <Card.Title>{mentor.userName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    {mentor.university}
+                    {mentor.university} : {mentor.enrollmentStatus}
                   </Card.Subtitle>
                   <Badge bg="success m-0">{mentor.gender}</Badge>
                   <br></br>
                   <Badge bg="success m-0">트레이너</Badge>
-                  <div>{mentor.enrollmentStatus}</div>
                 </div>
               </Card.Body>
             </Card>

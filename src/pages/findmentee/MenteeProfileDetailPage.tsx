@@ -5,7 +5,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { getToken, handleTokenError } from "../../auth/tokenService";
 import { MenteeProfile } from "../../components/findmentee/MenteeProfile";
@@ -64,17 +63,7 @@ const MenteeProfileDetailPage: React.FC = () => {
       <Container className="mentor-profile-detail-page mt-4">
         <Row>
           <Col md={3}>
-            <Card className="profile-card mb-4 align-items-center">
-              <div className="d-flex justify-content-end w-100">
-                <Button
-                  variant=""
-                  className="m-2"
-                  size="sm"
-                  style={{ border: "1px solid rgba(0, 0, 0, 0.175)" }}
-                >
-                  정보 수정
-                </Button>
-              </div>
+            <Card className="profile-card mb-4 p-3 align-items-center">
               <Card.Body className="align-items-center p-0">
                 <div className="text-center">
                   <img
@@ -84,7 +73,7 @@ const MenteeProfileDetailPage: React.FC = () => {
                   />
                   <Card.Title>{mentee.userName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    대학{" "}
+                    {mentee.age}
                   </Card.Subtitle>
                   <Badge bg="success m-0">{mentee.gender}</Badge>
                   <br></br>
