@@ -27,11 +27,11 @@ interface ProfileData {
   rate: string;
 }
 
-interface PaymentData {
-  ordNo: string;
+interface PaymentApprovalData {
   payPrice: string;
+  mentorUserName: string;
   trDay: string;
-  trTime: string;
+  trNo: string;
 }
 
 const MyPage: React.FC = () => {
@@ -50,15 +50,9 @@ const MyPage: React.FC = () => {
   });
 
   const [isMentor, setIsMentor] = useState(false);
-
-  const [paymentData, setPaymentData] = useState<PaymentData | null>(
-    location.state?.paymentData || null
-  );
-
-  const [mentorName, setMentorName] = useState<string | null>(
-    location.state?.mentorName || null
-  );
-
+  const [paymentApprovals, setPaymentApprovals] = useState<
+    PaymentApprovalData[]
+  >([]);
   const [showEditModal, setShowEditModal] = useState(false);
 
   const handleEditModalClose = () => setShowEditModal(false);
@@ -146,6 +140,17 @@ const MyPage: React.FC = () => {
           major: profileData.major,
           rate: profileData.rate,
         });
+
+        const paymentResponse = await axios.get<PaymentApprovalData[]>(
+          `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setPaymentApprovals(paymentResponse.data);
       }
     } catch (error) {
       await handleTokenError(error, fetchProfileData);
@@ -229,30 +234,30 @@ const MyPage: React.FC = () => {
                 <Button variant="outline-primary">바로가기</Button>
               </Card.Body>
             </Card>
-            {paymentData && (
-              <Card className="mb-4">
-                <Card.Header>결제 내역</Card.Header>
-                <Card.Body>
-                  <p>
-                    <strong>주문 번호:</strong> {paymentData.ordNo}
-                  </p>
-                  <p>
-                    <strong>결제 금액:</strong> {paymentData.payPrice} 원
-                  </p>
-                  <p>
-                    <strong>결제 날짜:</strong> {paymentData.trDay}
-                  </p>
-                  <p>
-                    <strong>결제 시간:</strong> {paymentData.trTime}
-                  </p>
-                  {mentorName && (
-                    <p>
-                      <strong>멘토 이름:</strong> {mentorName}
-                    </p>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
+
+            <Card className="mb-4">
+              <Card.Header>결제 내역</Card.Header>
+              <Card.Body>
+                {paymentApprovals.length === 0 ? (
+                  <p>결제 내역이 없습니다.</p>
+                ) : (
+                  <ListGroup>
+                    {paymentApprovals.map((approval, index) => (
+                      <ListGroup.Item key={index}>
+                        <strong>결제 금액:</strong> {approval.payPrice} 원
+                        <br />
+                        <strong>멘토 이름:</strong> {approval.mentorUserName}
+                        <br />
+                        <strong>결제 날짜:</strong> {approval.trDay}
+                        <br />
+                        <strong>거래 번호:</strong> {approval.trNo}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                )}
+              </Card.Body>
+            </Card>
+
             <Card className="mb-4">
               <Card.Header>멤버십</Card.Header>
               <Card.Body className="d-flex justify-content-between align-items-center">
@@ -269,10 +274,6 @@ const MyPage: React.FC = () => {
                 <Card.Body>{profileData.certifications}</Card.Body>
               </Card>
             )}
-            <Card className="mb-4">
-              <Card.Header>레벨별 혜택안내</Card.Header>
-              <Card.Body>레벨별 혜택안내 내용</Card.Body>
-            </Card>
           </Col>
         </Row>
       </Container>
