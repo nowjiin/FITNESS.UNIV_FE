@@ -11,6 +11,7 @@ import Badge from "react-bootstrap/Badge";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
 import EditProfileModal from "./EditProfileModal";
+import EditMenteeProfileModal from "./EditMenteeProfileModal";
 import { handleTokenError } from "../../auth/tokenService";
 import "./MyPage.scss";
 
@@ -48,6 +49,8 @@ const MyPage: React.FC = () => {
     rate: "",
   });
 
+  const [isMentor, setIsMentor] = useState(false);
+
   const [paymentData, setPaymentData] = useState<PaymentData | null>(
     location.state?.paymentData || null
   );
@@ -70,15 +73,17 @@ const MyPage: React.FC = () => {
         return;
       }
 
+      const endpoint =
+        profileData.role === "ROLE_MENTOR"
+          ? `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile`
+          : `${process.env.REACT_APP_BACKEND_URL}/api/mentee-profile`;
+
       // API 요청으로 업데이트된 데이터를 서버에 전송
-      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(endpoint, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // 업데이트된 데이터를 상태에 반영
       setProfileData((prevData) => ({
@@ -110,7 +115,9 @@ const MyPage: React.FC = () => {
       );
 
       const role = roleResponse.data;
-
+      if (role === "ROLE_MENTOR") {
+        setIsMentor(role === "ROLE_MENTOR");
+      }
       setProfileData((prevState) => ({
         ...prevState,
         role: role,
@@ -194,20 +201,21 @@ const MyPage: React.FC = () => {
           </Col>
           <Col md={9}>
             <Card className="mb-4">
-              <Card.Header>모집글</Card.Header>
+              <Card.Header>등록정보</Card.Header>
               <Card.Body>
                 <div>
                   1회 가격 : {profileData.rate} <br />
-                  내용
-                  <br />
-                  <br />
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: profileData.details.replace(/\n/g, "<br />"),
-                    }}
-                  />
+                  {isMentor && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: (profileData.details || "").replace(
+                          /\n/g,
+                          "<br />"
+                        ),
+                      }}
+                    />
+                  )}
                 </div>
-
                 <Button variant="outline-primary" onClick={handleEditModalShow}>
                   수정하기
                 </Button>
@@ -255,10 +263,12 @@ const MyPage: React.FC = () => {
                 <Button variant="outline-primary">바로가기</Button>
               </Card.Body>
             </Card>
-            <Card className="mb-4">
-              <Card.Header>증명서류 관리</Card.Header>
-              <Card.Body>{profileData.certifications}</Card.Body>
-            </Card>
+            {isMentor && (
+              <Card className="mb-4">
+                <Card.Header>증명서류 관리</Card.Header>
+                <Card.Body>{profileData.certifications}</Card.Body>
+              </Card>
+            )}
             <Card className="mb-4">
               <Card.Header>레벨별 혜택안내</Card.Header>
               <Card.Body>레벨별 혜택안내 내용</Card.Body>
@@ -267,12 +277,21 @@ const MyPage: React.FC = () => {
         </Row>
       </Container>
 
-      <EditProfileModal
-        show={showEditModal}
-        handleClose={handleEditModalClose}
-        profileData={profileData}
-        onSave={handleSaveProfileData}
-      />
+      {isMentor ? (
+        <EditProfileModal
+          show={showEditModal}
+          handleClose={handleEditModalClose}
+          profileData={profileData}
+          onSave={handleSaveProfileData}
+        />
+      ) : (
+        <EditMenteeProfileModal
+          show={showEditModal}
+          handleClose={handleEditModalClose}
+          profileData={profileData}
+          onSave={handleSaveProfileData}
+        />
+      )}
     </>
   );
 };

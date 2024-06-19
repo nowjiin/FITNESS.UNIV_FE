@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -5,34 +6,49 @@ import Card from "react-bootstrap/Card";
 import "./ServiceShortcut.scss"; // 스타일 시트를 가져옵니다.
 
 const ServiceShortcut = () => {
+  const navigate = useNavigate();
+
   const services = [
     {
-      title: "과외학생 찾기",
-      description: "144만 학생/학부모에게\n무제한 과외제안",
+      title: "트레이너 찾기",
+      description: "트레이너에게\n무제한 제안",
       icon: "../../icons/paperAirplane.svg",
       color: "#d9fcf6",
-      titleColor: "rgb(17 182 154)", // 추가된 titleColor 속성
+      titleColor: "rgb(17 182 154)",
+      link: "/findmentor",
     },
     {
-      title: "이용내역",
-      description: "내 과외 내역\n한눈에 보기",
-      icon: "../../icons/guidebook.svg",
+      title: "수강생 찾기",
+      description: "수강생 찾기\n트레이닝 제안",
+      // icon: "../../icons/bag.svg",
+      icon: "../../main/profile-img.png",
       color: "#cff1ff",
-      titleColor: "rgb(0 148 255)", // 추가된 titleColor 속성
+      titleColor: "rgb(0 148 255)",
+      link: "/findmentee",
     },
     {
-      title: "선생님 광장",
-      description: "52만 선생님과\n함께하는 커뮤니티",
+      title: "커뮤니티",
+      description: "질문 공유 게시판\n함께하는 커뮤니티",
       icon: "../../icons/Loudspeaker_Purple.svg",
       color: "rgb(248 241 255)",
       titleColor: "rgb(129 103 235)", // 추가된 titleColor 속성
+      link: "/community",
     },
     {
-      title: "멘토링",
-      description: "나의 지식과 재능을\n학생들과 나누는 공간",
+      title: "이용내역",
+      description: "내 이용 내역\n한눈에 보기",
+      icon: "../../icons/guidebook.svg",
+      color: "#cff1ff",
+      titleColor: "rgb(0 148 255)",
+      link: "/mypage",
+    },
+    {
+      title: "사용방법",
+      description: "웹페이지 사용방법\n및 기능",
       icon: "../../icons/QandA_orange.svg",
       color: "rgb(255 248 234)",
       titleColor: "rgb(255 109 0)", // 추가된 titleColor 속성
+      link: "/",
     },
     {
       title: "학습자료 찾기",
@@ -40,15 +56,13 @@ const ServiceShortcut = () => {
       icon: "../../icons/folder.svg",
       color: "rgb(255 248 234)",
       titleColor: "rgb(255 109 0)", // 추가된 titleColor 속성
-    },
-    {
-      title: "학원강사 채용공고",
-      description: "원하는 학원에\n즉시 지원하기",
-      icon: "../../icons/bag.svg",
-      color: "rgb(248 248 248)",
-      titleColor: "rgb(68 68 68)", // 추가된 titleColor 속성
+      link: "/",
     },
   ];
+
+  const handleCardClick = (link: string) => {
+    navigate(link);
+  };
 
   return (
     <Container className="mt-4">
@@ -59,6 +73,7 @@ const ServiceShortcut = () => {
             <Card
               className="h-100 service-card"
               style={{ backgroundColor: service.color }}
+              onClick={() => handleCardClick(service.link)}
             >
               <Card.Body className="d-flex align-items-center">
                 <div className="me-3 service-icon">
