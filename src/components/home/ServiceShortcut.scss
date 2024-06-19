@@ -1,0 +1,24 @@
+.service-card {
+  height: 100%;
+  border: transparent !important;
+  transition: transform 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-icon {
+  font-size: 2.5rem;
+}
+
+.service-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.service-description {
+  font-size: 0.8rem;
+  white-space: pre-line;
+  color: rgb(128 128 128);
+}

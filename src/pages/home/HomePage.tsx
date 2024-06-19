@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import NavBar from "../../components/navbar/NavBar";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
-import CardGroups from "../../components/home/HomeCards";
 import SignupOptions from "../../components/home/SignupOptions";
 import SportsCategories from "../../components/home/SportsCategories";
 import Reviews from "../../components/home/Reviews";
+import ServiceShortcut from "../../components/home/ServiceShortcut";
 
 function HomePage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -40,7 +40,7 @@ function HomePage() {
     <>
       {isAuthenticated ? <LoginedNavBar /> : <NavBar />}
       <NavMenuBar />
-      <CardGroups />
+      <ServiceShortcut />
       <SignupOptions />
       <SportsCategories />
       <Reviews />
