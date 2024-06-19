@@ -9,11 +9,11 @@ import "./Notice.scss";
 const notices = [
   {
     title: "",
-    content: "최종 배포 날짜 : 06월16일",
+    content: "최종 배포 날짜 : 06월19일",
   },
   {
     title: "",
-    content: "방명록이라도 써주세요.",
+    content: "방명록이라도 써주세요 ㅠㅠ",
   },
   {
     title: "",
@@ -23,10 +23,10 @@ const notices = [
 
 const Notice: React.FC = () => {
   return (
-    <Container className="">
+    <Container className="p-0">
       <Row>
         {notices.map((notice, index) => (
-          <Col md={4} key={index} className="mb-4">
+          <Col md={4} key={index} className="mb-4 ">
             <Card className="notice-card">
               <Card.Body>
                 <Badge>공지</Badge>

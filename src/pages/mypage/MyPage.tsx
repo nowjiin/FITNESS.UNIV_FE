@@ -10,6 +10,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
 import LoginedNavBar from "../../components/navbar/LoginedNavBar";
 import NavMenuBar from "../../components/navbar/NavMenuBar";
+import EditProfileModal from "./EditProfileModal";
+import EditMenteeProfileModal from "./EditMenteeProfileModal";
 import { handleTokenError } from "../../auth/tokenService";
 import "./MyPage.scss";
 
@@ -25,11 +27,11 @@ interface ProfileData {
   rate: string;
 }
 
-interface PaymentData {
-  ordNo: string;
+interface PaymentApprovalData {
   payPrice: string;
+  mentorUserName: string;
   trDay: string;
-  trTime: string;
+  trNo: string;
 }
 
 const MyPage: React.FC = () => {
@@ -47,13 +49,47 @@ const MyPage: React.FC = () => {
     rate: "",
   });
 
-  const [paymentData, setPaymentData] = useState<PaymentData | null>(
-    location.state?.paymentData || null
-  );
+  const [isMentor, setIsMentor] = useState(false);
+  const [paymentApprovals, setPaymentApprovals] = useState<
+    PaymentApprovalData[]
+  >([]);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const [mentorName, setMentorName] = useState<string | null>(
-    location.state?.mentorName || null
-  );
+  const handleEditModalClose = () => setShowEditModal(false);
+  const handleEditModalShow = () => setShowEditModal(true);
+
+  const handleSaveProfileData = async (updatedData: Partial<ProfileData>) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("로그인한 사용자만 이용 가능합니다!");
+        navigate("/");
+        return;
+      }
+
+      const endpoint =
+        profileData.role === "ROLE_MENTOR"
+          ? `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile`
+          : `${process.env.REACT_APP_BACKEND_URL}/api/mentee-profile`;
+
+      // API 요청으로 업데이트된 데이터를 서버에 전송
+      await axios.put(endpoint, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // 업데이트된 데이터를 상태에 반영
+      setProfileData((prevData) => ({
+        ...prevData,
+        ...updatedData,
+      }));
+      alert("프로필이 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      await handleTokenError(error, () => handleSaveProfileData(updatedData));
+      console.error("Error updating profile data:", error);
+    }
+  };
 
   const fetchProfileData = useCallback(async (): Promise<void> => {
     try {
@@ -73,7 +109,9 @@ const MyPage: React.FC = () => {
       );
 
       const role = roleResponse.data;
-
+      if (role === "ROLE_MENTOR") {
+        setIsMentor(role === "ROLE_MENTOR");
+      }
       setProfileData((prevState) => ({
         ...prevState,
         role: role,
@@ -94,7 +132,7 @@ const MyPage: React.FC = () => {
         setProfileData({
           userName: profileData.userName,
           university: profileData.university,
-          role: profileData.role,
+          role: role,
           details: profileData.details,
           certifications: profileData.certifications,
           enrollment_status: profileData.enrollment_status,
@@ -102,6 +140,17 @@ const MyPage: React.FC = () => {
           major: profileData.major,
           rate: profileData.rate,
         });
+
+        const paymentResponse = await axios.get<PaymentApprovalData[]>(
+          `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setPaymentApprovals(paymentResponse.data);
       }
     } catch (error) {
       await handleTokenError(error, fetchProfileData);
@@ -120,16 +169,6 @@ const MyPage: React.FC = () => {
         <Row>
           <Col md={3}>
             <Card className="profile-card mb-4 align-items-center">
-              <div className="d-flex justify-content-end w-100">
-                <Button
-                  variant=""
-                  className="m-2"
-                  size="sm"
-                  style={{ border: "1px solid rgba(0, 0, 0, 0.175)" }}
-                >
-                  정보 수정
-                </Button>
-              </div>
               <Card.Body className="align-items-center p-0">
                 <div className="text-center">
                   <img
@@ -167,10 +206,24 @@ const MyPage: React.FC = () => {
           </Col>
           <Col md={9}>
             <Card className="mb-4">
-              <Card.Header>모집글</Card.Header>
+              <Card.Header>등록정보</Card.Header>
               <Card.Body>
-                {profileData.details}{" "}
-                <Button variant="outline-primary">수정하기</Button>
+                <div>
+                  1회 가격 : {profileData.rate} <br />
+                  {isMentor && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: (profileData.details || "").replace(
+                          /\n/g,
+                          "<br />"
+                        ),
+                      }}
+                    />
+                  )}
+                </div>
+                <Button variant="outline-primary" onClick={handleEditModalShow}>
+                  수정하기
+                </Button>
               </Card.Body>
             </Card>
             <Card className="mb-4">
@@ -181,30 +234,30 @@ const MyPage: React.FC = () => {
                 <Button variant="outline-primary">바로가기</Button>
               </Card.Body>
             </Card>
-            {paymentData && (
-              <Card className="mb-4">
-                <Card.Header>결제 내역</Card.Header>
-                <Card.Body>
-                  <p>
-                    <strong>주문 번호:</strong> {paymentData.ordNo}
-                  </p>
-                  <p>
-                    <strong>결제 금액:</strong> {paymentData.payPrice} 원
-                  </p>
-                  <p>
-                    <strong>결제 날짜:</strong> {paymentData.trDay}
-                  </p>
-                  <p>
-                    <strong>결제 시간:</strong> {paymentData.trTime}
-                  </p>
-                  {mentorName && (
-                    <p>
-                      <strong>멘토 이름:</strong> {mentorName}
-                    </p>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
+
+            <Card className="mb-4">
+              <Card.Header>결제 내역</Card.Header>
+              <Card.Body>
+                {paymentApprovals.length === 0 ? (
+                  <p>결제 내역이 없습니다.</p>
+                ) : (
+                  <ListGroup>
+                    {paymentApprovals.map((approval, index) => (
+                      <ListGroup.Item key={index}>
+                        <strong>결제 금액:</strong> {approval.payPrice} 원
+                        <br />
+                        <strong>멘토 이름:</strong> {approval.mentorUserName}
+                        <br />
+                        <strong>결제 날짜:</strong> {approval.trDay}
+                        <br />
+                        <strong>거래 번호:</strong> {approval.trNo}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                )}
+              </Card.Body>
+            </Card>
+
             <Card className="mb-4">
               <Card.Header>멤버십</Card.Header>
               <Card.Body className="d-flex justify-content-between align-items-center">
@@ -215,17 +268,31 @@ const MyPage: React.FC = () => {
                 <Button variant="outline-primary">바로가기</Button>
               </Card.Body>
             </Card>
-            <Card className="mb-4">
-              <Card.Header>증명서류 관리</Card.Header>
-              <Card.Body>{profileData.certifications}</Card.Body>
-            </Card>
-            <Card className="mb-4">
-              <Card.Header>레벨별 혜택안내</Card.Header>
-              <Card.Body>레벨별 혜택안내 내용</Card.Body>
-            </Card>
+            {isMentor && (
+              <Card className="mb-4">
+                <Card.Header>증명서류 관리</Card.Header>
+                <Card.Body>{profileData.certifications}</Card.Body>
+              </Card>
+            )}
           </Col>
         </Row>
       </Container>
+
+      {isMentor ? (
+        <EditProfileModal
+          show={showEditModal}
+          handleClose={handleEditModalClose}
+          profileData={profileData}
+          onSave={handleSaveProfileData}
+        />
+      ) : (
+        <EditMenteeProfileModal
+          show={showEditModal}
+          handleClose={handleEditModalClose}
+          profileData={profileData}
+          onSave={handleSaveProfileData}
+        />
+      )}
     </>
   );
 };

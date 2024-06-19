@@ -1,0 +1,49 @@
+.btn-light {
+  background-color: rgba(29, 181, 190, 50%);
+  color: white;
+  &:hover {
+    background-color: #17a2b8;
+    color: white;
+  }
+}
+.btn-primary {
+  background-color: rgba(29, 181, 190);
+  border: none;
+  &:hover {
+    background-color: #17a2b8;
+  }
+}
+.btn-primary.active {
+  background-color: #1db5be;
+  border-color: #1db5be;
+  &:hover {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+}
+.btn-invalid {
+  background-color: #db4455;
+  animation: shake 0.5s;
+  color: white;
+  &:hover {
+    background-color: #db4455;
+    color: white;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

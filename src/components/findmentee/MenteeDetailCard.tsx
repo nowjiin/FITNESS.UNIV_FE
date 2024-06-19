@@ -16,16 +16,18 @@ const MenteeDetailCard: React.FC<MenteeDetailCardProps> = ({
     <>
       <Card>
         <Card.Header>
-          <h2>트레이너 소개</h2>
+          <h2>수강생 소개</h2>
         </Card.Header>
         <Card.Body>
           <Card.Text>
-            <strong>수강생 소개:</strong> 여기 머넣지
+            <strong>찾는 운동 트레이너 :</strong> {mentee.exercises.join(", ")}
           </Card.Text>
           <Card.Text>
-            <strong>1회당 금액:</strong> {mentee.rate}
+            <strong>1회당 생각중인 금액:</strong> {mentee.rate}
           </Card.Text>
-          <Card.Text>여기머넣지 </Card.Text>
+          <Card.Text>
+            <strong>가능 지역:</strong> {mentee.regions.join(", ")}
+          </Card.Text>
         </Card.Body>
         <Card.Footer>
           <Button onClick={onBack}>Back</Button>

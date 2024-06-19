@@ -17,7 +17,7 @@ import ChatButtonMentor from "../../components/common/ChatButtonMentor";
 const MentorProfileDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [mentor, setMentor] = useState<MentorProfile | null>(null);
-  const [paymentData, setPaymentData] = useState<any>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,12 +52,28 @@ const MentorProfileDetailPage: React.FC = () => {
 
     fetchMentorDetail();
 
-    const handleMessage = (event: MessageEvent) => {
+    const handleMessage = async (event: MessageEvent) => {
       if (event.data.type === "navigate_to_mypage") {
-        const paymentData = event.data.data;
-        navigate("/Mypage", {
-          state: { paymentData, mentorName: mentor?.userName },
-        });
+        const paymentDetails = event.data.paymentDetails || {};
+        paymentDetails.mentorUserName = mentor?.userName;
+        console.log("Updated Payment Details:", paymentDetails);
+
+        try {
+          const token = getToken();
+          await axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+            paymentDetails,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          navigate("/Mypage");
+        } catch (error) {
+          console.error("Payment approval error:", error);
+          alert("결제 승인 요청에 실패했습니다.");
+        }
       }
     };
 
@@ -66,7 +82,7 @@ const MentorProfileDetailPage: React.FC = () => {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, [id, navigate, mentor?.userName]);
+  }, [id, navigate, mentor?.userName, userId]);
 
   if (!mentor) {
     return <div>Loading...</div>;
@@ -79,17 +95,7 @@ const MentorProfileDetailPage: React.FC = () => {
       <Container className="mentor-profile-detail-page mt-4">
         <Row>
           <Col md={3}>
-            <Card className="profile-card mb-4 align-items-center">
-              <div className="d-flex justify-content-end w-100">
-                <Button
-                  variant=""
-                  className="m-2"
-                  size="sm"
-                  style={{ border: "1px solid rgba(0, 0, 0, 0.175)" }}
-                >
-                  정보 수정
-                </Button>
-              </div>
+            <Card className="profile-card mb-4 p-3 align-items-center">
               <Card.Body className="align-items-center p-0">
                 <div className="text-center">
                   <img
@@ -99,12 +105,11 @@ const MentorProfileDetailPage: React.FC = () => {
                   />
                   <Card.Title>{mentor.userName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    {mentor.university}
+                    {mentor.university} : {mentor.enrollmentStatus}
                   </Card.Subtitle>
                   <Badge bg="success m-0">{mentor.gender}</Badge>
                   <br></br>
                   <Badge bg="success m-0">트레이너</Badge>
-                  <div>{mentor.enrollmentStatus}</div>
                 </div>
               </Card.Body>
             </Card>

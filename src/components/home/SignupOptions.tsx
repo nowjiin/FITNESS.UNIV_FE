@@ -15,7 +15,7 @@ const SignupOptions: React.FC = () => {
   };
 
   return (
-    <Container fluid className="m-0 p-5 bg-gray-100 h-100">
+    <Container fluid className="mt-4 p-5 bg-gray-100">
       <h2 className="text-center mb-4 responsive-text">
         이제, 1분 만에 회원가입하고 나에게 딱 맞는 트레이너를 만나보세요
       </h2>

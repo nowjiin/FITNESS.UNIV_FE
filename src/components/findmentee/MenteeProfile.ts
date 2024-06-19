@@ -6,5 +6,6 @@ export interface MenteeProfile {
   regions: string[];
   gender: string;
   rate: string;
+  age: string;
 }
   

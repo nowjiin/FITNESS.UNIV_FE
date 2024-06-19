@@ -8,6 +8,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CryptoJS from "crypto-js";
+import { getToken, handleTokenError } from "../../auth/tokenService";
 
 const PaymentSuccessPage: React.FC = () => {
   const location = useLocation();
@@ -50,19 +51,47 @@ const PaymentSuccessPage: React.FC = () => {
 
       console.log("Settlebank API 요청 파라미터:", parameters);
       // 프록시를 사용하여 Settlebank API에 POST 요청
+      const token = getToken();
+
       axios
-        .post(
-          `${process.env.REACT_APP_BACKEND_URL}/proxy/settlebank`,
-          parameters
-        )
-        .then((response) => {
-          console.log("Settlebank API response:", response.data);
-          setPaymentDetails(response.data); // Save the payment details directly from Settlebank API response
-          setLoading(false);
+        .get(`${process.env.REACT_APP_BACKEND_URL}/auth/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
-        .catch((error) => {
-          console.error("Settlebank API error:", error);
-          setError("결제 승인 요청에 실패했습니다.");
+        .then((userResponse) => {
+          const userId = userResponse.data.userId;
+          console.log("User ID:", userId);
+
+          axios
+            .post(
+              `${process.env.REACT_APP_BACKEND_URL}/proxy/settlebank`,
+              parameters,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log("Settlebank API response:", response.data);
+              const paymentData = {
+                ...response.data,
+                userId: userId, // Add userId to the payment data
+              };
+              setPaymentDetails(paymentData); // Save the payment details including userId
+
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Settlebank API error:", error);
+              setError("결제 승인 요청에 실패했습니다.");
+              setLoading(false);
+            });
+        })
+        .catch((userError) => {
+          console.error("User info error:", userError);
+          setError("사용자 정보를 가져오는데 실패했습니다.");
           setLoading(false);
         });
     } else {
@@ -76,16 +105,9 @@ const PaymentSuccessPage: React.FC = () => {
   }
 
   const handleReturn = () => {
-    const paymentData = {
-      ordNo: paymentDetails.ordNo,
-      payPrice: paymentDetails.payPrice,
-      trDay: paymentDetails.trDay,
-      trTime: paymentDetails.trTime,
-    };
-
     // 부모 창에 결제 데이터를 메시지로 전송
     window.opener.postMessage(
-      { type: "navigate_to_mypage", data: paymentData },
+      { type: "navigate_to_mypage", paymentDetails },
       "*"
     );
     // 팝업 창 닫기
@@ -122,6 +144,9 @@ const PaymentSuccessPage: React.FC = () => {
                     </p>
                     <p>
                       <strong>결제 시간:</strong> {paymentDetails.trTime}
+                    </p>
+                    <p>
+                      <strong>사용자 ID:</strong> {paymentDetails.userId}
                     </p>
                   </div>
                 )}

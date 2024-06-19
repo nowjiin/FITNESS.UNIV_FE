@@ -5,6 +5,8 @@
   background-color: white;
   width: 100%; /* Ensure it takes the full width of its container */
   max-width: 300px; /* Optionally set a max-width if needed */
+  overflow: hidden; /* This ensures any overflowing text is hidden */
+
   cursor: pointer;
   transition: transform 0.2s;
   &:hover {

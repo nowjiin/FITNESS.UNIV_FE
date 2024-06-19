@@ -24,7 +24,7 @@ const MenteeStep3: React.FC<Props> = ({ onNext, onPrev, data }) => {
   return (
     <div className="mentor-step-page container text-center p-0">
       <div className=" mx-auto text-start">
-        <div className="input-title">트레이너 님의 성별을 알려주세요</div>
+        <div className="input-title">수강생 님의 성별을 알려주세요</div>
         <FormRadioGroup
           options={["남자", "여자"]}
           selectedValue={gender}
