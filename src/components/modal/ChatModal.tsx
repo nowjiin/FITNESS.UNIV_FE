@@ -33,7 +33,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ show, handleClose, rooms }) => {
                 className="profile-section"
                 onClick={() => handleRoomClick(room.roomNum)}
               >
-                <img src="profile-image-url.jpg" alt="Profile" />
+                <img src="../../common/profile.webp" alt="Profile" />
                 <div className="profile-info">
                   <h2>내 채팅방</h2>
                   <p>Status Message</p>
