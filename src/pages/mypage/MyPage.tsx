@@ -38,7 +38,8 @@ interface PaymentApprovalData {
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { mentorId } = location.state || {};
+  const { mentorId: locationMentorId } = location.state || {};
+  const [mentorId, setMentorId] = useState<number | null>(locationMentorId);
   const [profileData, setProfileData] = useState<ProfileData>({
     userName: "",
     university: "",
@@ -77,14 +78,12 @@ const MyPage: React.FC = () => {
           ? `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile`
           : `${process.env.REACT_APP_BACKEND_URL}/api/mentee-profile`;
 
-      // API 요청으로 업데이트된 데이터를 서버에 전송
       await axios.put(endpoint, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      // 업데이트된 데이터를 상태에 반영
       setProfileData((prevData) => ({
         ...prevData,
         ...updatedData,
@@ -104,6 +103,7 @@ const MyPage: React.FC = () => {
         navigate("/");
         return;
       }
+
       const roleResponse = await axios.get<string>(
         `${process.env.REACT_APP_BACKEND_URL}/api/check-user-role`,
         {
@@ -119,6 +119,20 @@ const MyPage: React.FC = () => {
         ...prevState,
         role: role,
       }));
+
+      if (role === "ROLE_MENTOR" && !mentorId) {
+        const mentorIdResponse = await axios.get<number>(
+          `${process.env.REACT_APP_BACKEND_URL}/api/mentor-profile/id`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const fetchedMentorId = mentorIdResponse.data;
+        setMentorId(fetchedMentorId);
+        console.log(fetchedMentorId); // 여기서 mentorIdResponse.data를 직접 출력
+      }
 
       if (role !== "ROLE_NEW") {
         const profileResponse = await axios.get<ProfileData>(
@@ -144,41 +158,15 @@ const MyPage: React.FC = () => {
           rate: profileData.rate,
         });
 
-        const paymentRequests = [
-          axios.get<PaymentApprovalData[]>(
-            `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          ),
-        ];
-
-        if (mentorId) {
-          paymentRequests.push(
-            axios.get<PaymentApprovalData[]>(
-              `${process.env.REACT_APP_BACKEND_URL}/payment/approval/mentor`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-                params: {
-                  mentorId: mentorId,
-                },
-              }
-            )
-          );
-        }
-
-        const [menteePayments, mentorPayments] = await Promise.all(
-          paymentRequests
+        const menteePayments = await axios.get<PaymentApprovalData[]>(
+          `${process.env.REACT_APP_BACKEND_URL}/payment/approval`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-
         setPaymentApprovals(menteePayments.data);
-        if (mentorPayments) {
-          setMentorPaymentApprovals(mentorPayments.data);
-        }
       }
     } catch (error) {
       await handleTokenError(error, fetchProfileData);
@@ -187,7 +175,41 @@ const MyPage: React.FC = () => {
 
   useEffect(() => {
     fetchProfileData();
-  }, [fetchProfileData]);
+  }, []); // 빈 배열을 종속성 배열로 설정하여 마운트 시 한 번만 실행
+
+  useEffect(() => {
+    if (mentorId) {
+      const fetchMentorPayments = async () => {
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            alert("로그인한 사용자만 이용 가능합니다!");
+            navigate("/");
+            return;
+          }
+
+          const mentorPayments = await axios.get<PaymentApprovalData[]>(
+            `${process.env.REACT_APP_BACKEND_URL}/payment/approval/mentor/${mentorId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log("Mentor Payments Data: ", mentorPayments.data); // 디버깅용 로그 추가
+          setMentorPaymentApprovals(mentorPayments.data);
+          console.log(
+            "Updated Mentor Payment Approvals: ",
+            mentorPayments.data
+          ); // 상태 업데이트 후 로그 추가
+        } catch (error) {
+          await handleTokenError(error, fetchMentorPayments);
+        }
+      };
+
+      fetchMentorPayments();
+    }
+  }, [mentorId, navigate]);
 
   return (
     <>
@@ -264,7 +286,35 @@ const MyPage: React.FC = () => {
               </Card.Body>
             </Card>
 
-            {paymentApprovals.length > 0 && (
+            {profileData.role === "ROLE_MENTOR" &&
+              (mentorPaymentApprovals.length > 0 ? (
+                <Card className="mb-4">
+                  <Card.Header>멘토 결제 내역</Card.Header>
+                  <Card.Body>
+                    <ListGroup>
+                      {mentorPaymentApprovals.map((approval, index) => (
+                        <ListGroup.Item key={index}>
+                          <strong>결제 금액:</strong> {approval.payPrice} 원
+                          <br />
+                          <strong>수강생 이름:</strong>{" "}
+                          {approval.mentorUserName}
+                          <br />
+                          <strong>결제 날짜:</strong> {approval.trDay}
+                          <br />
+                          <strong>거래 번호:</strong> {approval.trNo}
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card.Body>
+                </Card>
+              ) : (
+                <Card className="mb-4">
+                  <Card.Header>멘토 결제 내역</Card.Header>
+                  <Card.Body>결제 내역이 없습니다.</Card.Body>
+                </Card>
+              ))}
+
+            {paymentApprovals.length > 0 ? (
               <Card className="mb-4">
                 <Card.Header>결제 내역</Card.Header>
                 <Card.Body>
@@ -283,26 +333,10 @@ const MyPage: React.FC = () => {
                   </ListGroup>
                 </Card.Body>
               </Card>
-            )}
-
-            {mentorPaymentApprovals.length > 0 && (
+            ) : (
               <Card className="mb-4">
-                <Card.Header>멘토 결제 내역</Card.Header>
-                <Card.Body>
-                  <ListGroup>
-                    {mentorPaymentApprovals.map((approval, index) => (
-                      <ListGroup.Item key={index}>
-                        <strong>결제 금액:</strong> {approval.payPrice} 원
-                        <br />
-                        <strong>수강생 이름:</strong> {approval.mentorUserName}
-                        <br />
-                        <strong>결제 날짜:</strong> {approval.trDay}
-                        <br />
-                        <strong>거래 번호:</strong> {approval.trNo}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                </Card.Body>
+                <Card.Header>결제 내역</Card.Header>
+                <Card.Body>결제 내역이 없습니다.</Card.Body>
               </Card>
             )}
 
