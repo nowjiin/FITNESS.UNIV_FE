@@ -33,6 +33,7 @@ interface PaymentApprovalData {
   mentorUserName: string;
   trDay: string;
   trNo: string;
+  menteeUserName: String;
 }
 
 const MyPage: React.FC = () => {
@@ -297,7 +298,7 @@ const MyPage: React.FC = () => {
                           <strong>결제 금액:</strong> {approval.payPrice} 원
                           <br />
                           <strong>수강생 이름:</strong>{" "}
-                          {approval.mentorUserName}
+                          {approval.menteeUserName}
                           <br />
                           <strong>결제 날짜:</strong> {approval.trDay}
                           <br />
