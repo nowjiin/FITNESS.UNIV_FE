@@ -50,6 +50,24 @@ const MentorProfileDetailPage: React.FC = () => {
       }
     };
 
+    const fetchMenteeProfile = async () => {
+      try {
+        const token = getToken();
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/mentee-profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching mentee profile:", error);
+        return null;
+      }
+    };
+
     fetchMentorDetail();
 
     const handleMessage = async (event: MessageEvent) => {
@@ -58,6 +76,12 @@ const MentorProfileDetailPage: React.FC = () => {
         paymentDetails.mentorUserName = mentor?.userName;
         paymentDetails.mentorId = id;
         console.log("Updated Payment Details:", paymentDetails);
+
+        const menteeProfile = await fetchMenteeProfile();
+        if (menteeProfile) {
+          paymentDetails.menteeUserName = menteeProfile.userName;
+          console.log("Mentee Profile User Name:", menteeProfile.userName);
+        }
 
         try {
           const token = getToken();
